@@ -35,6 +35,8 @@
 #include <linux/string_helpers.h>
 #include <linux/alarmtimer.h>
 #include <linux/qpnp/qpnp-revid.h>
+#include <linux/gpio.h>
+#include <linux/of_gpio.h>
 
 /* Register offsets */
 
@@ -6900,6 +6902,9 @@ static int fg_of_init(struct fg_chip *chip)
 	const char *data;
 	struct device_node *node = chip->spmi->dev.of_node;
 	u32 temp[2] = {0};
+	int gpio_127;
+
+	gpio_127 = gpio_get_value(127);
 
 	OF_READ_SETTING(FG_MEM_SOFT_HOT, "warm-bat-decidegc", rc, 1);
 	OF_READ_SETTING(FG_MEM_SOFT_COLD, "cool-bat-decidegc", rc, 1);
@@ -6954,7 +6959,7 @@ static int fg_of_init(struct fg_chip *chip)
 				* FULL_SOC_RAW, FULL_CAPACITY);
 	OF_READ_SETTING(FG_MEM_RESUME_SOC, "resume-soc-raw", rc, 1);
 	OF_READ_SETTING(FG_MEM_IRQ_VOLT_EMPTY, "irq-volt-empty-mv", rc, 1);
-	OF_READ_SETTING(FG_MEM_VBAT_EST_DIFF, "vbat-estimate-diff-mv", rc, 1);
+	OF_READ_SETTING(FG_MEM_VBAT_EST_DIFF, "fg-vbat-estimate-diff-mv", rc, 1);
 	OF_READ_SETTING(FG_MEM_DELTA_SOC, "fg-delta-soc", rc, 1);
 	OF_READ_SETTING(FG_MEM_BATT_LOW, "fg-vbatt-low-threshold", rc, 1);
 	OF_READ_SETTING(FG_MEM_THERM_DELAY, "fg-therm-delay-us", rc, 1);
@@ -7003,8 +7008,13 @@ static int fg_of_init(struct fg_chip *chip)
 			chip->spmi->dev.of_node,
 			"qcom,hold-soc-while-full");
 
+	if(0 == gpio_127)
 	sense_type = of_property_read_bool(chip->spmi->dev.of_node,
 					"qcom,ext-sense-type");
+	else
+		sense_type = of_property_read_bool(chip->spmi->dev.of_node,
+						"qcom,ext-sense-type-mp");
+
 	if (rc == 0) {
 		if (fg_sense_type < 0)
 			fg_sense_type = sense_type;
