@@ -34,10 +34,18 @@ static inline void __user *to_user_ptr(u64 address)
 }
 
 static struct msm_gem_submit *submit_create(struct drm_device *dev,
+<<<<<<< HEAD
 		struct msm_gpu *gpu, uint32_t nr)
 {
 	struct msm_gem_submit *submit;
 	uint64_t sz = sizeof(*submit) + (nr * sizeof(submit->bos[0]));
+=======
+		struct msm_gpu *gpu, uint32_t nr_cmds, uint32_t nr_bos)
+{
+	struct msm_gem_submit *submit;
+	uint64_t sz = sizeof(*submit) + (nr_bos * sizeof(submit->bos[0])) +
+		(nr_cmds * sizeof(submit->cmd[0]));
+>>>>>>> bq-bardock-o-beta
 
 	if (sz > SIZE_MAX)
 		return NULL;
@@ -50,6 +58,10 @@ static struct msm_gem_submit *submit_create(struct drm_device *dev,
 		/* initially, until copy_from_user() and bo lookup succeeds: */
 		submit->nr_bos = 0;
 		submit->nr_cmds = 0;
+
+		submit->cmd = (void *)submit + sizeof(*submit);
+		submit->bos = (void *)submit->cmd +
+			(nr_cmds * sizeof(submit->cmd[0]));
 
 		INIT_LIST_HEAD(&submit->bo_list);
 		ww_acquire_init(&submit->ticket, &reservation_ww_class);
@@ -323,7 +335,7 @@ static int submit_reloc(struct msm_gem_submit *submit, struct msm_gem_object *ob
 	return 0;
 }
 
-static void submit_cleanup(struct msm_gem_submit *submit, bool fail)
+static void submit_cleanup(struct msm_gem_submit *submit, int fail)
 {
 	unsigned i;
 
@@ -335,7 +347,8 @@ static void submit_cleanup(struct msm_gem_submit *submit, bool fail)
 	}
 
 	ww_acquire_fini(&submit->ticket);
-	kfree(submit);
+	if (fail)
+		kfree(submit);
 }
 
 int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
@@ -357,13 +370,12 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
 
 	gpu = priv->gpu;
 
-	if (args->nr_cmds > MAX_CMDS)
-		return -EINVAL;
-
 	mutex_lock(&dev->struct_mutex);
 
-	submit = submit_create(dev, gpu, args->nr_bos);
+	submit = submit_create(dev, gpu, args->nr_cmds, args->nr_bos);
 	if (!submit) {
+		DRM_ERROR("Create submit error, nr_cmds=%u, nr_bos=%u\n",
+				args->nr_cmds, args->nr_bos);
 		ret = -ENOMEM;
 		goto out;
 	}
@@ -445,8 +457,8 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
 	args->fence = submit->fence;
 
 out:
-	if (submit)
-		submit_cleanup(submit, !!ret);
+	submit_cleanup(submit, ret);
+
 	mutex_unlock(&dev->struct_mutex);
 	return ret;
 }

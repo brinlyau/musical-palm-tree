@@ -719,6 +719,7 @@ static int voice_svc_release(struct inode *inode, struct file *file)
 			pr_err("%s: Failed to dereg MVM %d\n", __func__, ret);
 	}
 
+	mutex_lock(&prtd->response_mutex_lock);
 	spin_lock_irqsave(&prtd->response_lock, spin_flags);
 
 	while (!list_empty(&prtd->response_queue)) {
@@ -733,6 +734,8 @@ static int voice_svc_release(struct inode *inode, struct file *file)
 
 	spin_unlock_irqrestore(&prtd->response_lock, spin_flags);
 	mutex_unlock(&prtd->response_mutex_lock);
+
+	mutex_destroy(&prtd->response_mutex_lock);
 
 	mutex_destroy(&prtd->response_mutex_lock);
 

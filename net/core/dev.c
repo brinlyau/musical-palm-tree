@@ -3696,7 +3696,11 @@ static bool skb_pfmemalloc_protocol(struct sk_buff *skb)
 	}
 }
 
-int (*athrs_fast_nat_recv)(struct sk_buff *skb) __rcu __read_mostly;
+int (*gsb_nw_stack_recv)(struct sk_buff *skb) __rcu __read_mostly;
+EXPORT_SYMBOL(gsb_nw_stack_recv);
+
+int (*athrs_fast_nat_recv)(struct sk_buff *skb,
+			   struct packet_type *pt_temp) __rcu __read_mostly;
 EXPORT_SYMBOL(athrs_fast_nat_recv);
 
 int (*embms_tm_multicast_recv)(struct sk_buff *skb) __rcu __read_mostly;
@@ -3711,7 +3715,8 @@ static int __netif_receive_skb_core(struct sk_buff *skb, bool pfmemalloc)
 	bool deliver_exact = false;
 	int ret = NET_RX_DROP;
 	__be16 type;
-	int (*fast_recv)(struct sk_buff *skb);
+	int (*gsb_ns_recv)(struct sk_buff *skb);
+	int (*fast_recv)(struct sk_buff *skb, struct packet_type *pt_temp);
 	int (*embms_recv)(struct sk_buff *skb);
 
 	net_timestamp_check(!netdev_tstamp_prequeue, skb);
@@ -3758,9 +3763,17 @@ another_round:
 	}
 
 skip_taps:
+	gsb_ns_recv = rcu_dereference(gsb_nw_stack_recv);
+	if (gsb_ns_recv) {
+		if (gsb_ns_recv(skb)) {
+			ret = NET_RX_SUCCESS;
+			goto out;
+		}
+	}
+
 	fast_recv = rcu_dereference(athrs_fast_nat_recv);
 	if (fast_recv) {
-		if (fast_recv(skb)) {
+		if (fast_recv(skb, pt_prev)) {
 			ret = NET_RX_SUCCESS;
 			goto out;
 		}
@@ -4120,7 +4133,8 @@ static enum gro_result dev_gro_receive(struct napi_struct *napi, struct sk_buff 
 		NAPI_GRO_CB(skb)->same_flow = 0;
 		NAPI_GRO_CB(skb)->flush = 0;
 		NAPI_GRO_CB(skb)->free = 0;
-		NAPI_GRO_CB(skb)->udp_mark = 0;
+		NAPI_GRO_CB(skb)->encap_mark = 0;
+		NAPI_GRO_CB(skb)->recursion_counter = 0;
 
 		/* Setup for GRO checksum validation */
 		switch (skb->ip_summed) {
@@ -6689,8 +6703,8 @@ struct rtnl_link_stats64 *dev_get_stats(struct net_device *dev,
 	} else {
 		netdev_stats_to_stats64(storage, &dev->stats);
 	}
-	storage->rx_dropped += atomic_long_read(&dev->rx_dropped);
-	storage->tx_dropped += atomic_long_read(&dev->tx_dropped);
+	storage->rx_dropped += (unsigned long)atomic_long_read(&dev->rx_dropped);
+	storage->tx_dropped += (unsigned long)atomic_long_read(&dev->tx_dropped);
 	return storage;
 }
 EXPORT_SYMBOL(dev_get_stats);

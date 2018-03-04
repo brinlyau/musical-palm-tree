@@ -14,6 +14,7 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/device.h>
+#include <linux/kernel.h>
 #include <linux/err.h>
 #include <linux/sched.h>
 #include <linux/ratelimit.h>
@@ -218,7 +219,12 @@ static void usb_disconnect(struct diag_usb_info *ch)
 	if (!ch)
 		return;
 
+<<<<<<< HEAD
 	if (!atomic_read(&ch->connected) && driver->usb_connected)
+=======
+	if (!atomic_read(&ch->connected) &&
+		driver->usb_connected && diag_mask_param())
+>>>>>>> bq-bardock-o-beta
 		diag_clear_masks(NULL);
 
 	if (ch && ch->ops && ch->ops->close)

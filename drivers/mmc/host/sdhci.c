@@ -805,9 +805,20 @@ static u8 sdhci_calc_timeout(struct sdhci_host *host, struct mmc_command *cmd)
 	if (!data)
 		target_timeout = cmd->busy_timeout * 1000;
 	else {
-		target_timeout = data->timeout_ns / 1000;
-		if (host->clock)
-			target_timeout += data->timeout_clks / host->clock;
+		target_timeout = DIV_ROUND_UP(data->timeout_ns, 1000);
+		if (host->clock && data->timeout_clks) {
+			unsigned long long val;
+
+			/*
+			 * data->timeout_clks is in units of clock cycles.
+			 * host->clock is in Hz.  target_timeout is in us.
+			 * Hence, us = 1000000 * cycles / Hz.  Round up.
+			 */
+			val = 1000000ULL * data->timeout_clks;
+			if (do_div(val, host->clock))
+				target_timeout++;
+			target_timeout += val;
+		}
 	}
 
 	/*
@@ -3021,11 +3032,6 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
 		 * above in sdhci_cmd_irq().
 		 */
 		if (host->cmd && (host->cmd->flags & MMC_RSP_BUSY)) {
-			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
-				host->cmd->error = -ETIMEDOUT;
-				tasklet_schedule(&host->finish_tasklet);
-				return;
-			}
 			if (intmask & SDHCI_INT_DATA_END) {
 				/*
 				 * Some cards handle busy-end interrupt
@@ -3039,8 +3045,20 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
 				return;
 			}
 			if (host->quirks2 &
-				SDHCI_QUIRK2_IGNORE_DATATOUT_FOR_R1BCMD)
+				SDHCI_QUIRK2_IGNORE_DATATOUT_FOR_R1BCMD) {
+				pr_err_ratelimited("%s: %s: ignoring interrupt: 0x%08x due to DATATOUT_FOR_R1B quirk\n",
+						mmc_hostname(host->mmc),
+						__func__, intmask);
+				MMC_TRACE(host->mmc,
+					"%s: Quirk ignoring intr: 0x%08x\n",
+						__func__, intmask);
 				return;
+			}
+			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
+				host->cmd->error = -ETIMEDOUT;
+				tasklet_schedule(&host->finish_tasklet);
+				return;
+			}
 		}
 
 		pr_err("%s: Got data interrupt 0x%08x even "
@@ -4176,12 +4194,21 @@ int sdhci_add_host(struct sdhci_host *host)
 	max_current_caps = sdhci_readl(host, SDHCI_MAX_CURRENT);
 	if (!max_current_caps) {
 		u32 curr = 0;
+<<<<<<< HEAD
 
 		if (!IS_ERR(mmc->supply.vmmc))
 			curr = regulator_get_current_limit(mmc->supply.vmmc);
 		else if (host->ops->get_current_limit)
 			curr = host->ops->get_current_limit(host);
 
+=======
+
+		if (!IS_ERR(mmc->supply.vmmc))
+			curr = regulator_get_current_limit(mmc->supply.vmmc);
+		else if (host->ops->get_current_limit)
+			curr = host->ops->get_current_limit(host);
+
+>>>>>>> bq-bardock-o-beta
 		if (curr > 0) {
 			/* convert to SDHCI_MAX_CURRENT format */
 			curr = curr/1000;  /* convert to mA */

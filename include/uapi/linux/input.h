@@ -16,6 +16,7 @@
 #include <linux/types.h>
 #endif
 
+#include "input-event-codes.h"
 
 /*
  * The event structure itself
@@ -162,6 +163,7 @@ struct input_keymap_entry {
 #define EVIOCSCLOCKID		_IOW('E', 0xa0, int)			/* Set clockid to be used for timestamps */
 
 /*
+<<<<<<< HEAD
  * Device properties and quirks
  */
 
@@ -950,6 +952,8 @@ struct input_keymap_entry {
 #define SND_CNT			(SND_MAX+1)
 
 /*
+=======
+>>>>>>> bq-bardock-o-beta
  * IDs.
  */
 

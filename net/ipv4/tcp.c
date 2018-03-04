@@ -275,9 +275,6 @@
 #include <net/tcp.h>
 #include <net/xfrm.h>
 #include <net/ip.h>
-#include <net/ip6_route.h>
-#include <net/ipv6.h>
-#include <net/transp_v6.h>
 #include <net/sock.h>
 
 #include <asm/uaccess.h>
@@ -2294,6 +2291,8 @@ int tcp_disconnect(struct sock *sk, int flags)
 	tcp_init_send_head(sk);
 	memset(&tp->rx_opt, 0, sizeof(tp->rx_opt));
 	__sk_dst_reset(sk);
+	dst_release(sk->sk_rx_dst);
+	sk->sk_rx_dst = NULL;
 
 	WARN_ON(inet->inet_num && !icsk->icsk_bind_hash);
 
@@ -3210,6 +3209,7 @@ void __init tcp_init(void)
 	BUG_ON(tcp_register_congestion_control(&tcp_reno) != 0);
 	tcp_tasklet_init();
 }
+<<<<<<< HEAD
 
 static int tcp_is_local(struct net *net, __be32 addr) {
 	struct rtable *rt;
@@ -3331,3 +3331,5 @@ restart:
 
 	return 0;
 }
+=======
+>>>>>>> bq-bardock-o-beta

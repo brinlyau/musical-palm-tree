@@ -2206,7 +2206,11 @@ int expand_upwards(struct vm_area_struct *vma, unsigned long address)
 
 	/* Guard against exceeding limits of the address space. */
 	address &= PAGE_MASK;
+<<<<<<< HEAD
 	if (address >= TASK_SIZE)
+=======
+	if (address >= (TASK_SIZE & PAGE_MASK))
+>>>>>>> bq-bardock-o-beta
 		return -ENOMEM;
 	address += PAGE_SIZE;
 
