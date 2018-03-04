@@ -219,12 +219,8 @@ static void usb_disconnect(struct diag_usb_info *ch)
 	if (!ch)
 		return;
 
-<<<<<<< HEAD
-	if (!atomic_read(&ch->connected) && driver->usb_connected)
-=======
 	if (!atomic_read(&ch->connected) &&
 		driver->usb_connected && diag_mask_param())
->>>>>>> bq-bardock-o-beta
 		diag_clear_masks(NULL);
 
 	if (ch && ch->ops && ch->ops->close)

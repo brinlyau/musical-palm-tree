@@ -1738,15 +1738,6 @@ long qcedev_ioctl(struct file *file, unsigned cmd, unsigned long arg)
 		if (err) {
 			mutex_unlock(&hash_access_lock);
 			return err;
-<<<<<<< HEAD
-
-		if (handle->sha_ctxt.diglen > QCEDEV_MAX_SHA_DIGEST) {
-			pr_err("Invalid sha_ctxt.diglen %d\n",
-					handle->sha_ctxt.diglen);
-			return -EINVAL;
-
-=======
->>>>>>> bq-bardock-o-beta
 		}
 		if (handle->sha_ctxt.diglen > QCEDEV_MAX_SHA_DIGEST) {
 			pr_err("Invalid sha_ctxt.diglen %d\n",
@@ -1789,15 +1780,6 @@ long qcedev_ioctl(struct file *file, unsigned cmd, unsigned long arg)
 		if (err) {
 			mutex_unlock(&hash_access_lock);
 			return err;
-<<<<<<< HEAD
-
-		if (handle->sha_ctxt.diglen > QCEDEV_MAX_SHA_DIGEST) {
-			pr_err("Invalid sha_ctxt.diglen %d\n",
-					handle->sha_ctxt.diglen);
-			return -EINVAL;
-
-=======
->>>>>>> bq-bardock-o-beta
 		}
 		if (handle->sha_ctxt.diglen > QCEDEV_MAX_SHA_DIGEST) {
 			pr_err("Invalid sha_ctxt.diglen %d\n",

@@ -1897,13 +1897,8 @@ struct napi_gro_cb {
 	/* This is non-zero if the packet may be of the same flow. */
 	u8	same_flow:1;
 
-<<<<<<< HEAD
-	/* Used in udp_gro_receive */
-	u8	udp_mark:1;
-=======
 	/* Used in tunnel GRO receive */
 	u8	encap_mark:1;
->>>>>>> bq-bardock-o-beta
 
 	/* GRO checksum is valid */
 	u8	csum_valid:1;
@@ -1921,14 +1916,11 @@ struct napi_gro_cb {
 
 	/* 7 bit hole */
 
-<<<<<<< HEAD
-=======
 	/* Number of gro_receive callbacks this packet already went through */
 	u8 recursion_counter:4;
 
 	/* 1 bit hole */
 
->>>>>>> bq-bardock-o-beta
 	/* used to support CHECKSUM_COMPLETE for tunneling protocols */
 	__wsum	csum;
 

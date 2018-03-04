@@ -441,7 +441,6 @@ static int ipa_generate_rt_hw_tbl_v1_1(enum ipa_ip_type ip,
 	int max_rt_idx;
 	int i;
 	int res;
-<<<<<<< HEAD
 
 	res = ipa_get_rt_hw_tbl_size(ip, &hdr_sz, &max_rt_idx);
 	if (res < 0) {
@@ -449,15 +448,6 @@ static int ipa_generate_rt_hw_tbl_v1_1(enum ipa_ip_type ip,
 		goto error;
 	}
 
-=======
-
-	res = ipa_get_rt_hw_tbl_size(ip, &hdr_sz, &max_rt_idx);
-	if (res < 0) {
-		IPAERR("ipa_get_rt_hw_tbl_size failed %d\n", res);
-		goto error;
-	}
-
->>>>>>> bq-bardock-o-beta
 	mem->size = res;
 	mem->size = (mem->size + IPA_RT_TABLE_MEMORY_ALLIGNMENT) &
 				~IPA_RT_TABLE_MEMORY_ALLIGNMENT;

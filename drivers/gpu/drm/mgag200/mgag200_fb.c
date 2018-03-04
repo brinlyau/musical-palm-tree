@@ -292,25 +292,13 @@ int mgag200_fbdev_init(struct mga_device *mdev)
 
 	ret = drm_fb_helper_single_add_all_connectors(&mfbdev->helper);
 	if (ret)
-<<<<<<< HEAD
-		goto fini;
-=======
 		goto err_fb_setup;
->>>>>>> bq-bardock-o-beta
 
 	/* disable all the possible outputs/crtcs before entering KMS mode */
 	drm_helper_disable_unused_functions(mdev->dev);
 
 	ret = drm_fb_helper_initial_config(&mfbdev->helper, bpp_sel);
 	if (ret)
-<<<<<<< HEAD
-		goto fini;
-
-	return 0;
-
-fini:
-	drm_fb_helper_fini(&mfbdev->helper);
-=======
 		goto err_fb_setup;
 
 	return 0;
@@ -320,7 +308,6 @@ err_fb_setup:
 err_fb_helper:
 	mdev->mfbdev = NULL;
 
->>>>>>> bq-bardock-o-beta
 	return ret;
 }
 

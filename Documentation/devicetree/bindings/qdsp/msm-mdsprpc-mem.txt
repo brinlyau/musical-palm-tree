@@ -13,8 +13,6 @@ Example:
 		compatible = "qcom,msm-mdsprpc-mem-region";
 		memory-region = <&mdsp_mem>;
 	};
-<<<<<<< HEAD
-=======
 
 Ion Heap:
 
@@ -24,4 +22,3 @@ and between user space and kernel space.
 
 Required properties for Ion heap:
 - compatible : "qcom,msm-ion"
->>>>>>> bq-bardock-o-beta

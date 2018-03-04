@@ -2264,9 +2264,6 @@ static sector_t f2fs_bmap(struct address_space *mapping, sector_t block)
 	if (f2fs_has_inline_data(inode))
 		return 0;
 
-<<<<<<< HEAD
-	return generic_block_bmap(mapping, block, get_data_block_bmap);
-=======
 	/* make sure allocating whole blocks */
 	if (mapping_tagged(mapping, PAGECACHE_TAG_DIRTY))
 		filemap_write_and_wait(mapping);
@@ -2327,7 +2324,6 @@ int f2fs_migrate_page(struct address_space *mapping,
 	migrate_page_copy(newpage, page);
 
 	return MIGRATEPAGE_SUCCESS;
->>>>>>> bq-bardock-o-beta
 }
 #endif
 

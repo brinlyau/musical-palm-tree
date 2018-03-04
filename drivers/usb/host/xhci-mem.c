@@ -2731,8 +2731,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
 
 	if (xhci_check_trb_in_td_math(xhci, flags) < 0)
 		goto fail;
-<<<<<<< HEAD
-=======
 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
 			"// Allocated event ring segment table at 0x%llx",
 			(unsigned long long)dma);
@@ -2780,7 +2778,6 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
 			"Wrote ERST address to ir_set 0.");
 	xhci_print_ir_set(xhci, 0);
->>>>>>> bq-bardock-o-beta
 
 	/* init command timeout timer */
 	init_timer(&xhci->cmd_timer);

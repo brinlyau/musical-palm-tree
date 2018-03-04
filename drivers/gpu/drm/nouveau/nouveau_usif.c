@@ -320,18 +320,9 @@ usif_ioctl(struct drm_file *filp, void __user *user, u32 argc)
 	} else
 		goto done;
 
-<<<<<<< HEAD
-	object = (void *)(unsigned long)argv->v0.token;
-	if (!access_ok(VERIFY_READ, object, sizeof(struct usif_object))) {
-		ret = -EINVAL;
-		goto done;
-	}
-
-=======
 	/* USIF slightly abuses some return-only ioctl members in order
 	 * to provide interoperability with the older ABI16 objects
 	 */
->>>>>>> bq-bardock-o-beta
 	mutex_lock(&cli->mutex);
 	if (argv->v0.route) {
 		if (ret = -EINVAL, argv->v0.route == 0xff)

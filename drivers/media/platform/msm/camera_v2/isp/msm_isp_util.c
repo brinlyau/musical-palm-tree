@@ -598,20 +598,10 @@ static int msm_isp_set_dual_HW_master_slave_mode(
 	}
 
 	/* No lock needed here since ioctl lock protects 2 session from race */
-<<<<<<< HEAD
-	/* reset master SOF which refer slave in increment_frame_id function
-	 *
-	 */
-	vfe_dev->common_data->ms_resource.master_sof_info.frame_id = 0;
-	vfe_dev->common_data->ms_resource.master_sof_info.mono_timestamp_ms = 0;
-	/* we have only 1 slave so reset it frame_id so that master will
-	 * not jump*/
-=======
 	/* Reset master SOF which refer slave in increment_frame_id function */
 	vfe_dev->common_data->ms_resource.master_sof_info.frame_id = 0;
 	vfe_dev->common_data->ms_resource.master_sof_info.mono_timestamp_ms = 0;
 	/* Reset slave frame_id so that master will not jump */
->>>>>>> bq-bardock-o-beta
 	vfe_dev->common_data->ms_resource.slave_sof_info[0].frame_id = 0;
 	if (src_info != NULL &&
 		dual_hw_ms_cmd->dual_hw_ms_type == MS_TYPE_MASTER) {
@@ -1809,40 +1799,6 @@ void msm_isp_update_error_frame_count(struct vfe_device *vfe_dev)
 static int msm_isp_process_iommu_page_fault(struct vfe_device *vfe_dev)
 {
 	int rc = vfe_dev->buf_mgr->pagefault_debug_disable;
-<<<<<<< HEAD
-    uint32_t irq_status0, irq_status1;
-    uint32_t overflow_mask;
-    unsigned long irq_flags;
-
-       /* Check if any overflow bit is set */
-       vfe_dev->hw_info->vfe_ops.core_ops.
-               get_overflow_mask(&overflow_mask);
-       vfe_dev->hw_info->vfe_ops.irq_ops.
-               read_irq_status(vfe_dev, &irq_status0, &irq_status1);
-       overflow_mask &= irq_status1;
-       spin_lock_irqsave(
-               &vfe_dev->common_data->common_dev_data_lock, irq_flags);
-       if (overflow_mask ||
-               atomic_read(&vfe_dev->error_info.overflow_state) !=
-                       NO_OVERFLOW) {
-               spin_unlock_irqrestore(
-                       &vfe_dev->common_data->common_dev_data_lock, irq_flags);
-               pr_err_ratelimited("%s: overflow detected during IOMMU\n",
-                       __func__);
-               /* Don't treat the Overflow + Page fault scenario as fatal.
-                * Instead try to do a recovery. Using an existing event as
-                * as opposed to creating a new event.
-                */
-               msm_isp_halt_send_error(vfe_dev, ISP_EVENT_PING_PONG_MISMATCH);
-       } else {
-               spin_unlock_irqrestore(
-                       &vfe_dev->common_data->common_dev_data_lock, irq_flags);
-               trace_printk("%s:%d] VFE%d Handle Page fault! vfe_dev %pK\n",
-                       __func__, __LINE__,  vfe_dev->pdev->id, vfe_dev);
-               vfe_dev->hw_info->vfe_ops.axi_ops.halt(vfe_dev, 0);
-               msm_isp_halt_send_error(vfe_dev, ISP_EVENT_IOMMU_P_FAULT);
-       }
-=======
 	uint32_t irq_status0, irq_status1;
 	uint32_t overflow_mask;
 	unsigned long irq_flags;
@@ -1875,7 +1831,6 @@ static int msm_isp_process_iommu_page_fault(struct vfe_device *vfe_dev)
 		vfe_dev->hw_info->vfe_ops.axi_ops.halt(vfe_dev, 0);
 		msm_isp_halt_send_error(vfe_dev, ISP_EVENT_IOMMU_P_FAULT);
 	}
->>>>>>> bq-bardock-o-beta
 
 	if (vfe_dev->buf_mgr->pagefault_debug_disable == 0) {
 		vfe_dev->buf_mgr->pagefault_debug_disable = 1;
@@ -1919,10 +1874,7 @@ void msm_isp_process_overflow_irq(
 {
 	uint32_t overflow_mask;
 	unsigned long flags;
-<<<<<<< HEAD
-=======
 	struct msm_isp_event_data error_event;
->>>>>>> bq-bardock-o-beta
 
 	/* if there are no active streams - do not start recovery */
 	if (!vfe_dev->axi_data.num_active_stream)
@@ -1946,27 +1898,8 @@ void msm_isp_process_overflow_irq(
 	if (!force_overflow)
 		overflow_mask &= *irq_status1;
 
-<<<<<<< HEAD
-	if (overflow_mask) {
-		struct msm_isp_event_data error_event;
-
-        spin_lock_irqsave(
-			&vfe_dev->common_data->common_dev_data_lock, flags);
-
-		if (vfe_dev->reset_pending == 1) {
-			pr_err("%s:%d failed: overflow %x during reset\n",
-				__func__, __LINE__, overflow_mask);
-			/* Clear overflow bits since reset is pending */
-			*irq_status1 &= ~overflow_mask;
-            spin_unlock_irqrestore(
-				 &vfe_dev->common_data->common_dev_data_lock,
-				 flags);
-			return;
-		}
-=======
 	if (!overflow_mask)
 		return;
->>>>>>> bq-bardock-o-beta
 
 	spin_lock_irqsave(&vfe_dev->common_data->common_dev_data_lock,
 		flags);
@@ -1989,34 +1922,6 @@ void msm_isp_process_overflow_irq(
 	ISP_DBG("%s: VFE%d Bus overflow detected: start recovery!\n",
 		__func__, vfe_dev->pdev->id);
 
-<<<<<<< HEAD
-		/* maks off irq for current vfe */
-		atomic_cmpxchg(&vfe_dev->error_info.overflow_state,
-			NO_OVERFLOW, OVERFLOW_DETECTED);
-		vfe_dev->recovery_irq0_mask = vfe_dev->irq0_mask;
-		vfe_dev->recovery_irq1_mask = vfe_dev->irq1_mask;
-
-		vfe_dev->hw_info->vfe_ops.core_ops.
-			set_halt_restart_mask(vfe_dev);
-
-		vfe_dev->hw_info->vfe_ops.axi_ops.halt(vfe_dev, 0);
-
-		/* mask off other vfe if dual vfe is used */
-		if (vfe_dev->is_split) {
-			uint32_t other_vfe_id;
-			struct vfe_device *other_vfe_dev;
-
-			other_vfe_id = (vfe_dev->pdev->id == ISP_VFE0) ?
-				ISP_VFE1 : ISP_VFE0;
-			other_vfe_dev = vfe_dev->common_data->
-				dual_vfe_res->vfe_dev[other_vfe_id];
-			if (other_vfe_dev) {
-			  other_vfe_dev->recovery_irq0_mask =
-				  other_vfe_dev->irq0_mask;
-			  other_vfe_dev->recovery_irq1_mask =
-				  other_vfe_dev->irq1_mask;
-			}
-=======
 	trace_msm_cam_isp_overflow(vfe_dev, *irq_status0, *irq_status1);
 
 	/* maks off irq for current vfe */
@@ -2041,29 +1946,18 @@ void msm_isp_process_overflow_irq(
 			other_vfe_dev->recovery_irq1_mask =
 				other_vfe_dev->irq1_mask;
 		}
->>>>>>> bq-bardock-o-beta
 
 		atomic_cmpxchg(&(vfe_dev->common_data->dual_vfe_res->
 			vfe_dev[other_vfe_id]->
 			error_info.overflow_state),
 			NO_OVERFLOW, OVERFLOW_DETECTED);
 
-<<<<<<< HEAD
-			vfe_dev->hw_info->vfe_ops.core_ops.
-				set_halt_restart_mask(vfe_dev->common_data->
-				dual_vfe_res->vfe_dev[other_vfe_id]);
-				if (other_vfe_dev) {
-	               	other_vfe_dev->hw_info->vfe_ops.axi_ops.
-    	           	halt(other_vfe_dev, 0);
-                }
-=======
 		vfe_dev->hw_info->vfe_ops.core_ops.
 			set_halt_restart_mask(vfe_dev->common_data->
 			dual_vfe_res->vfe_dev[other_vfe_id]);
 		if (other_vfe_dev) {
 			other_vfe_dev->hw_info->vfe_ops.axi_ops.
 				halt(other_vfe_dev, 0);
->>>>>>> bq-bardock-o-beta
 		}
 	}
 
@@ -2071,22 +1965,6 @@ void msm_isp_process_overflow_irq(
 	*irq_status0 = 0;
 	*irq_status1 = 0;
 
-<<<<<<< HEAD
-		/* send overflow event as needed */
-		if (atomic_read(&vfe_dev->error_info.overflow_state)
-			!= HALT_ENFORCED) {
-			memset(&error_event, 0, sizeof(error_event));
-			error_event.frame_id =
-				vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id;
-			error_event.u.error_info.err_type =
-				ISP_ERROR_BUS_OVERFLOW;
-			msm_isp_send_event(vfe_dev,
-				ISP_EVENT_ERROR, &error_event);
-		}
-        spin_unlock_irqrestore(
-			&vfe_dev->common_data->common_dev_data_lock,
-			flags);
-=======
 	/* send overflow event as needed */
 	if (atomic_read(&vfe_dev->error_info.overflow_state)
 		!= HALT_ENFORCED) {
@@ -2097,7 +1975,6 @@ void msm_isp_process_overflow_irq(
 			ISP_ERROR_BUS_OVERFLOW;
 		msm_isp_send_event(vfe_dev,
 			ISP_EVENT_ERROR, &error_event);
->>>>>>> bq-bardock-o-beta
 	}
 	spin_unlock_irqrestore(&vfe_dev->common_data->
 		common_dev_data_lock, flags);
@@ -2333,13 +2210,9 @@ static void msm_vfe_iommu_fault_handler(struct iommu_domain *domain,
 
 		mutex_lock(&vfe_dev->core_mutex);
 		if (vfe_dev->vfe_open_cnt > 0) {
-<<<<<<< HEAD
-			pr_err_ratelimited("%s: fault address is %lx, HALT_ENFORCED\n",
-=======
 			atomic_set(&vfe_dev->error_info.overflow_state,
 				HALT_ENFORCED);
 			pr_err_ratelimited("%s: fault address is %lx\n",
->>>>>>> bq-bardock-o-beta
 				__func__, iova);
 			msm_isp_process_iommu_page_fault(vfe_dev);
 		} else {

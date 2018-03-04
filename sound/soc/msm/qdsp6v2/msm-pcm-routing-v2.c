@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-/* Copyright (c) 2012-2017, The Linux Foundation. All rights reserved.
-=======
 /* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
->>>>>>> bq-bardock-o-beta
+ *
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -2044,14 +2041,6 @@ static int msm_routing_lsm_port_get(struct snd_kcontrol *kcontrol,
 static int msm_routing_lsm_port_put(struct snd_kcontrol *kcontrol,
 				   struct snd_ctl_elem_value *ucontrol)
 {
-<<<<<<< HEAD
-	struct snd_soc_dapm_widget_list *wlist =
-					dapm_kcontrol_get_wlist(kcontrol);
-	struct snd_soc_dapm_widget *widget = wlist->widgets[0];
-	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
-	unsigned int mux = ucontrol->value.enumerated.item[0];
-=======
->>>>>>> bq-bardock-o-beta
 	int lsm_port = AFE_PORT_ID_SLIMBUS_MULTI_CHAN_5_TX;
 
 	pr_debug("%s: LSM enable %ld\n", __func__,
@@ -2444,13 +2433,6 @@ static int msm_pcm_channel_mixer_info(struct snd_kcontrol *kcontrol,
 {
 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
 
-<<<<<<< HEAD
-	if (mux >= e->items) {
-		pr_err("%s: Invalid mux value %d\n", __func__, mux);
-		return -EINVAL;
-	}
-
-=======
 	uinfo->type = SNDRV_CTL_ELEM_TYPE_ENUMERATED;
 	uinfo->count = 1;
 
@@ -3090,8 +3072,6 @@ static int msm_routing_ec_ref_rx_put(struct snd_kcontrol *kcontrol,
 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
 	struct snd_soc_dapm_update *update = NULL;
 
-
->>>>>>> bq-bardock-o-beta
 	mutex_lock(&routing_lock);
 	switch (ucontrol->value.integer.value[0]) {
 	case 0:
@@ -10864,11 +10844,9 @@ static const struct snd_soc_dapm_widget msm_qdsp6_widgets[] = {
 	SND_SOC_DAPM_MIXER("QUAT_MI2S_RX Port Mixer", SND_SOC_NOPM, 0, 0,
 	quat_mi2s_rx_port_mixer_controls,
 	ARRAY_SIZE(quat_mi2s_rx_port_mixer_controls)),
-<<<<<<< HEAD
 	SND_SOC_DAPM_MIXER("QUIN_MI2S_RX Port Mixer", SND_SOC_NOPM, 0, 0,
 	quin_mi2s_rx_port_mixer_controls,
 	ARRAY_SIZE(quin_mi2s_rx_port_mixer_controls)),
-=======
 	SND_SOC_DAPM_MIXER("PRI_TDM_RX_0 Port Mixer", SND_SOC_NOPM, 0, 0,
 	pri_tdm_rx_0_port_mixer_controls,
 	ARRAY_SIZE(pri_tdm_rx_0_port_mixer_controls)),
@@ -10893,7 +10871,6 @@ static const struct snd_soc_dapm_widget msm_qdsp6_widgets[] = {
 	SND_SOC_DAPM_MIXER("SEC_TDM_RX_3 Port Mixer", SND_SOC_NOPM, 0, 0,
 	sec_tdm_rx_3_port_mixer_controls,
 	ARRAY_SIZE(sec_tdm_rx_3_port_mixer_controls)),
->>>>>>> bq-bardock-o-beta
 	SND_SOC_DAPM_MIXER("TERT_TDM_RX_0 Port Mixer", SND_SOC_NOPM, 0, 0,
 	tert_tdm_rx_0_port_mixer_controls,
 	ARRAY_SIZE(tert_tdm_rx_0_port_mixer_controls)),

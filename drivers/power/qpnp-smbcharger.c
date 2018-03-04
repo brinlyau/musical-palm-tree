@@ -38,13 +38,7 @@
 #include <linux/of_batterydata.h>
 #include <linux/msm_bcl.h>
 #include <linux/ktime.h>
-<<<<<<< HEAD
-#include <linux/notifier.h>
-
-#include "pmic-voter.h"
-=======
 #include <linux/pmic-voter.h>
->>>>>>> bq-bardock-o-beta
 
 /* Mask/Bit helpers */
 #define _SMB_MASK(BITS, POS) \
@@ -426,47 +420,6 @@ enum wake_reason {
 #define	HVDCP_OTG_VOTER			"HVDCP_OTG_VOTER"
 #define	HVDCP_PULSING_VOTER		"HVDCP_PULSING_VOTER"
 
-<<<<<<< HEAD
-enum hw_aicl_rerun_enable_indirect_voters {
-	/* enabled via device tree */
-	DEFAULT_CONFIG_HW_AICL_VOTER,
-	/* Varb workaround voter */
-	VARB_WORKAROUND_VOTER,
-	/* SHUTDOWN workaround voter */
-	SHUTDOWN_WORKAROUND_VOTER,
-	NUM_HW_AICL_RERUN_ENABLE_INDIRECT_VOTERS,
-};
-
-enum hw_aicl_rerun_disable_voters {
-	/* the results from enabling clients */
-	HW_AICL_RERUN_ENABLE_INDIRECT_VOTER,
-	/* Weak charger voter */
-	WEAK_CHARGER_HW_AICL_VOTER,
-	NUM_HW_AICL_DISABLE_VOTERS,
-};
-
-enum aicl_short_deglitch_voters {
-	/* Varb workaround voter */
-	VARB_WORKAROUND_SHORT_DEGLITCH_VOTER,
-	/* QC 2.0 */
-	HVDCP_SHORT_DEGLITCH_VOTER,
-	NUM_HW_SHORT_DEGLITCH_VOTERS,
-};
-enum hvdcp_voters {
-	HVDCP_PMIC_VOTER,
-	HVDCP_OTG_VOTER,
-	HVDCP_PULSING_VOTER,
-	NUM_HVDCP_VOTERS,
-};
-
-#define RUNIN_BATT_CAPACITY_CONTROL
-#ifdef RUNIN_BATT_CAPACITY_CONTROL
-static int BatteryTestStatus_enable;
-static void runin_work(struct smbchg_chip *chip, int batt_capacity);
-#endif
-
-=======
->>>>>>> bq-bardock-o-beta
 static int smbchg_debug_mask;
 module_param_named(
 	debug_mask, smbchg_debug_mask, int, S_IRUSR | S_IWUSR
@@ -2747,17 +2700,6 @@ static int dc_suspend_vote_cb(struct votable *votable,
 }
 
 #define HVDCP_EN_BIT			BIT(3)
-<<<<<<< HEAD
-static int smbchg_hvdcp_enable_cb(struct device *dev, int enable,
-						int client, int last_enable,
-						int last_client)
-{
-	int rc = 0;
-	struct smbchg_chip *chip = dev_get_drvdata(dev);
-
-	pr_err("smbchg_hvdcp_enable_cb  enable %d last_enable %d\n",
-			enable, last_enable);
-=======
 static int smbchg_hvdcp_enable_cb(struct votable *votable,
 				void *data,
 				int enable,
@@ -2767,7 +2709,6 @@ static int smbchg_hvdcp_enable_cb(struct votable *votable,
 	struct smbchg_chip *chip = data;
 
 	pr_err("smbchg_hvdcp_enable_cb  enable %d\n", enable);
->>>>>>> bq-bardock-o-beta
 	rc = smbchg_sec_masked_write(chip,
 				chip->usb_chgpth_base + CHGPTH_CFG,
 				HVDCP_EN_BIT, enable ? HVDCP_EN_BIT : 0);
@@ -2778,12 +2719,8 @@ static int smbchg_hvdcp_enable_cb(struct votable *votable,
 	return rc;
 }
 
-<<<<<<< HEAD
-static int set_fastchg_current_vote_cb(struct device *dev,
-=======
 static int set_fastchg_current_vote_cb(struct votable *votable,
 						void *data,
->>>>>>> bq-bardock-o-beta
 						int fcc_ma,
 						const char *client)
 {
@@ -3109,14 +3046,9 @@ static int set_usb_current_limit_vote_cb(struct votable *votable,
 
 	effective_client = get_effective_client_locked(chip->usb_icl_votable);
 
-<<<<<<< HEAD
-	/* Disable parallel charger if ICL is changed */
-	smbchg_parallel_usb_disable(chip);
-=======
 	/* disable parallel charging if HVDCP is voting for 300mA */
 	if (effective_client && strcmp(effective_client, HVDCP_ICL_VOTER) == 0)
 		smbchg_parallel_usb_disable(chip);
->>>>>>> bq-bardock-o-beta
 
 	if (chip->parallel.current_max_ma == 0) {
 		rc = smbchg_set_usb_current_max(chip, icl_ma);
@@ -3132,15 +3064,10 @@ static int set_usb_current_limit_vote_cb(struct votable *votable,
 			return rc;
 		}
 	}
-<<<<<<< HEAD
-	/* skip the aicl rerun if hvdcp icl voter is active */
-	if (effective_id == HVDCP_ICL_VOTER)
-=======
 
 	/* skip the aicl rerun if hvdcp icl voter or parallel voter is active */
 	if (effective_client && (!strcmp(effective_client, HVDCP_ICL_VOTER) ||
 			!strcmp(effective_client, PARALLEL_ICL_VOTER)))
->>>>>>> bq-bardock-o-beta
 		return 0;
 
 	aicl_ma = smbchg_get_aicl_level_ma(chip);
@@ -4049,69 +3976,6 @@ static void check_battery_type(struct smbchg_chip *chip)
 	}
 }
 
-<<<<<<< HEAD
-static void smbchg_external_power_changed(struct power_supply *psy)
-{
-	struct smbchg_chip *chip = container_of(psy,
-				struct smbchg_chip, batt_psy);
-	union power_supply_propval prop = {0,};
-	int rc, current_limit = 0, soc;
-	enum power_supply_type usb_supply_type;
-	char *usb_type_name = "null";
-
-	if (chip->bms_psy_name)
-		chip->bms_psy =
-			power_supply_get_by_name((char *)chip->bms_psy_name);
-
-	smbchg_aicl_deglitch_wa_check(chip);
-	if (chip->bms_psy) {
-		check_battery_type(chip);
-		soc = get_prop_batt_capacity(chip);
-		if (chip->previous_soc != soc) {
-			chip->previous_soc = soc;
-			smbchg_soc_changed(chip);
-		}
-
-		rc = smbchg_config_chg_battery_type(chip);
-		if (rc)
-			pr_smb(PR_MISC,
-				"Couldn't update charger configuration rc=%d\n",
-									rc);
-	}
-
-	rc = chip->usb_psy->get_property(chip->usb_psy,
-				POWER_SUPPLY_PROP_CHARGING_ENABLED, &prop);
-	if (rc == 0)
-		vote(chip->usb_suspend_votable, POWER_SUPPLY_EN_VOTER,
-				!prop.intval, 0);
-
-	rc = chip->usb_psy->get_property(chip->usb_psy,
-				POWER_SUPPLY_PROP_CURRENT_MAX, &prop);
-	if (rc == 0)
-		current_limit = prop.intval / 1000;
-
-	read_usb_type(chip, &usb_type_name, &usb_supply_type);
-
-	if (usb_supply_type != POWER_SUPPLY_TYPE_USB)
-		goto  skip_current_for_non_sdp;
-
-	current_limit = 500;
-	pr_smb(PR_MISC, "usb type = %s current_limit = %d\n",
-			usb_type_name, current_limit);
-
-	rc = vote(chip->usb_icl_votable, PSY_ICL_VOTER, true,
-				current_limit);
-	if (rc < 0)
-		pr_err("Couldn't update USB PSY ICL vote rc=%d\n", rc);
-
-skip_current_for_non_sdp:
-	smbchg_vfloat_adjust_check(chip);
-
-	power_supply_changed(&chip->batt_psy);
-}
-
-=======
->>>>>>> bq-bardock-o-beta
 static int smbchg_otg_regulator_enable(struct regulator_dev *rdev)
 {
 	int rc = 0;
@@ -5087,16 +4951,12 @@ static void handle_usb_removal(struct smbchg_chip *chip)
 	cancel_delayed_work_sync(&chip->hvdcp_det_work);
 	smbchg_relax(chip, PM_DETECT_HVDCP);
 	smbchg_change_usb_supply_type(chip, POWER_SUPPLY_TYPE_UNKNOWN);
-<<<<<<< HEAD
-	charger_notify_charger_type(POWER_SUPPLY_TYPE_UNKNOWN);
-=======
 
 	if (chip->parallel.use_parallel_aicl) {
 		complete_all(&chip->hvdcp_det_done);
 		pr_smb(PR_MISC, "complete hvdcp_det_done\n");
 	}
 
->>>>>>> bq-bardock-o-beta
 	if (!chip->skip_usb_notification) {
 		pr_smb(PR_MISC, "setting usb psy present = %d\n",
 				chip->usb_present);

@@ -1450,9 +1450,6 @@ static int msm_compr_capture_open(struct snd_compr_stream *cstream)
 	pr_debug("%s: session ID %d\n", __func__, prtd->audio_client->session);
 	prtd->audio_client->perf_mode = false;
 	prtd->session_id = prtd->audio_client->session;
-<<<<<<< HEAD
-	pdata->is_in_use[rtd->dai_link->be_id] = true;
-=======
 	prtd->codec = FORMAT_LINEAR_PCM;
 	prtd->bytes_copied = 0;
 	prtd->bytes_read = 0;
@@ -1474,7 +1471,6 @@ static int msm_compr_capture_open(struct snd_compr_stream *cstream)
 	atomic_set(&prtd->error, 0);
 
 	runtime->private_data = prtd;
->>>>>>> bq-bardock-o-beta
 
 	return 0;
 }
@@ -1584,8 +1580,6 @@ static int msm_compr_playback_free(struct snd_compr_stream *cstream)
 		pdata->dec_params[soc_prtd->dai_link->be_id] = NULL;
 	}
 	pdata->is_in_use[soc_prtd->dai_link->be_id] = false;
-<<<<<<< HEAD
-=======
 	kfree(prtd);
 	runtime->private_data = NULL;
 
@@ -1646,7 +1640,6 @@ static int msm_compr_capture_free(struct snd_compr_stream *cstream)
 
 	q6asm_audio_client_free(ac);
 
->>>>>>> bq-bardock-o-beta
 	kfree(prtd);
 	runtime->private_data = NULL;
 
@@ -2409,36 +2402,6 @@ static int msm_compr_pointer(struct snd_compr_stream *cstream,
 		return -ENETRESET;
 	}
 	if (cstream->direction == SND_COMPRESS_PLAYBACK) {
-
-<<<<<<< HEAD
-	gapless_transition = prtd->gapless_state.gapless_transition;
-	spin_unlock_irqrestore(&prtd->lock, flags);
-
-	if (gapless_transition)
-		pr_debug("%s session time in gapless transition",
-			 __func__);
-
-	/*
-	 - Do not query if no buffer has been given.
-	 - Do not query on a gapless transition.
-	   Playback for the 2nd stream can start (thus returning time
-	   starting from 0) before the driver knows about EOS of first stream.
-	*/
-
-	if (!first_buffer && !gapless_transition) {
-		if (pdata->use_legacy_api)
-			rc = q6asm_get_session_time_legacy(prtd->audio_client,
-						&prtd->marker_timestamp);
-		else
-			rc = q6asm_get_session_time(prtd->audio_client,
-						&prtd->marker_timestamp);
-
-		if (rc < 0) {
-			pr_err("%s: Get Session Time return value =%lld\n",
-				__func__, timestamp);
-			if (atomic_read(&prtd->error))
-				return -ENETRESET;
-=======
 		gapless_transition = prtd->gapless_state.gapless_transition;
 		spin_unlock_irqrestore(&prtd->lock, flags);
 		if (gapless_transition)
@@ -2456,7 +2419,6 @@ static int msm_compr_pointer(struct snd_compr_stream *cstream,
 			if (pdata->use_legacy_api)
 				rc = q6asm_get_session_time_legacy(
 				prtd->audio_client, &prtd->marker_timestamp);
->>>>>>> bq-bardock-o-beta
 			else
 				rc = q6asm_get_session_time(
 				prtd->audio_client, &prtd->marker_timestamp);
@@ -2469,11 +2431,8 @@ static int msm_compr_pointer(struct snd_compr_stream *cstream,
 					return -EAGAIN;
 			}
 		}
-<<<<<<< HEAD
-=======
 	} else {
 		spin_unlock_irqrestore(&prtd->lock, flags);
->>>>>>> bq-bardock-o-beta
 	}
 	timestamp = prtd->marker_timestamp;
 

@@ -2843,27 +2843,9 @@ static int mdss_panel_parse_dt(struct device_node *np,
 
 	mdss_dsi_parse_dfps_config(np, ctrl_pdata);
 
-<<<<<<< HEAD
-	pinfo->is_dba_panel = of_property_read_bool(np,
-			"qcom,dba-panel");
-
-	if (pinfo->is_dba_panel) {
-		bridge_chip_name = of_get_property(np,
-			"qcom,bridge-name", &len);
-		if (!bridge_chip_name || len <= 0) {
-			pr_err("%s:%d Unable to read qcom,bridge_name, data=%pK,len=%d\n",
-				__func__, __LINE__, bridge_chip_name, len);
-			rc = -EINVAL;
-			goto error;
-		}
-		strlcpy(ctrl_pdata->bridge_name, bridge_chip_name,
-			MSM_DBA_CHIP_NAME_MAX_LEN);
-	}
-=======
 	rc = mdss_panel_parse_dt_hdmi(np, ctrl_pdata);
 	if (rc)
 		goto error;
->>>>>>> bq-bardock-o-beta
 
 	return 0;
 

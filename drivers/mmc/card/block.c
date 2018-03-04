@@ -3339,13 +3339,6 @@ static void mmc_blk_cmdq_err(struct mmc_queue *mq)
 	/* RED error - Fatal: requires reset */
 	if (mrq->cmdq_req->resp_err)
 		err = mrq->cmdq_req->resp_err;
-<<<<<<< HEAD
-		goto reset;
-	}
-=======
-
->>>>>>> bq-bardock-o-beta
-
 	/*
 	 * TIMEOUT errrors can happen because of execution error
 	 * in the last command. So send cmd 13 to get device status
@@ -3777,11 +3770,7 @@ static int mmc_blk_cmdq_issue_rq(struct mmc_queue *mq, struct request *req)
 		} else {
 			pr_err("%s: %s: partition switch failed err = %d\n",
 				md->disk->disk_name, __func__, err);
-<<<<<<< HEAD
-			ret = err;
-=======
 			ret = 0;
->>>>>>> bq-bardock-o-beta
 			goto out;
 		}
 	}

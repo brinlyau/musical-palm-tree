@@ -16,11 +16,7 @@
 #include "msm_led_flash.h"
 
 #undef CDBG
-<<<<<<< HEAD
-#define CDBG(fmt, args...) pr_debug(fmt, ##args)
-=======
 #define CDBG(fmt, args...) pr_err(fmt, ##args)
->>>>>>> bq-bardock-o-beta
 
 static struct v4l2_file_operations msm_led_flash_v4l2_subdev_fops;
 
@@ -28,13 +24,8 @@ static long msm_led_flash_subdev_ioctl(struct v4l2_subdev *sd,
 	unsigned int cmd, void *arg)
 {
 	struct msm_led_flash_ctrl_t *fctrl = NULL;
-<<<<<<< HEAD
-	struct msm_camera_led_cfg_t data;
-	void __user *argp = (void __user *)arg;
-=======
 	void *argp = (void *)arg;
 
->>>>>>> bq-bardock-o-beta
 	if (!sd) {
 		pr_err("sd NULL\n");
 		return -EINVAL;
@@ -46,21 +37,6 @@ static long msm_led_flash_subdev_ioctl(struct v4l2_subdev *sd,
 	}
 	switch (cmd) {
 	case VIDIOC_MSM_SENSOR_GET_SUBDEV_ID:
-<<<<<<< HEAD
-		return fctrl->func_tbl->flash_get_subdev_id(fctrl, argp);
-	case VIDIOC_MSM_FLASH_LED_DATA_CFG:
-		return fctrl->func_tbl->flash_led_config(fctrl, argp);
-	case MSM_SD_NOTIFY_FREEZE:
-		return 0;
-	case MSM_SD_SHUTDOWN:
-		if(NULL != fctrl->func_tbl->flash_led_release) {
-			return fctrl->func_tbl->flash_led_release(fctrl);
-		} else {
-			pr_err("TODO:fctrl->func_tbl->flash_led_release need to be impletment??\n");
-			data.cfgtype = MSM_CAMERA_LED_RELEASE;
-			return fctrl->func_tbl->flash_led_config(fctrl,&data);
-		}
-=======
                 if (fctrl->func_tbl->flash_get_subdev_id)
 			return fctrl->func_tbl->flash_get_subdev_id(fctrl, argp);
 		else
@@ -80,7 +56,6 @@ static long msm_led_flash_subdev_ioctl(struct v4l2_subdev *sd,
 		else
 			pr_err("NULL flash_led_release function\n");
 			return -EINVAL;
->>>>>>> bq-bardock-o-beta
 	default:
 		pr_err_ratelimited("invalid cmd %d\n", cmd);
 		return -ENOIOCTLCMD;
@@ -119,11 +94,7 @@ int32_t msm_led_flash_create_v4lsubdev(struct platform_device *pdev, void *data)
 		"msm_flash");
 	media_entity_init(&fctrl->msm_sd.sd.entity, 0, NULL, 0);
 	fctrl->msm_sd.sd.entity.type = MEDIA_ENT_T_V4L2_SUBDEV;
-<<<<<<< HEAD
-	fctrl->msm_sd.sd.entity.group_id = MSM_CAMERA_SUBDEV_LED_FLASH;
-=======
 	fctrl->msm_sd.sd.entity.group_id = MSM_CAMERA_SUBDEV_FLASH;
->>>>>>> bq-bardock-o-beta
 	fctrl->msm_sd.close_seq = MSM_SD_CLOSE_2ND_CATEGORY | 0x1;
 	msm_sd_register(&fctrl->msm_sd);
 

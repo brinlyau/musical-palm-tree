@@ -437,20 +437,13 @@ static void q6asm_session_free(struct audio_client *ac)
 	struct list_head		*ptr, *next;
 	struct asm_no_wait_node		*node;
 	unsigned long			flags;
-<<<<<<< HEAD
-=======
 	unsigned long			session_flags;
->>>>>>> bq-bardock-o-beta
 	int session_id;
 
 	pr_debug("%s: sessionid[%d]\n", __func__, ac->session);
 	session_id = ac->session;
 	rtac_remove_popp_from_adm_devices(ac->session);
-<<<<<<< HEAD
-	spin_lock_bh(&(session[session_id].session_lock));
-=======
 	spin_lock_irqsave(&(session[session_id].session_lock), session_flags);
->>>>>>> bq-bardock-o-beta
 	session[ac->session].ac = NULL;
 	ac->session = 0;
 	ac->perf_mode = LEGACY_PCM_MODE;
@@ -467,12 +460,8 @@ static void q6asm_session_free(struct audio_client *ac)
 	spin_unlock_irqrestore(&ac->no_wait_que_spinlock, flags);
 
 	kfree(ac);
-<<<<<<< HEAD
-	spin_unlock_bh(&(session[session_id].session_lock));
-=======
 	spin_unlock_irqrestore(&(session[session_id].session_lock),
 			       session_flags);
->>>>>>> bq-bardock-o-beta
 	return;
 }
 
@@ -1452,23 +1441,15 @@ static int32_t q6asm_srvc_callback(struct apr_client_data *data, void *priv)
 	}
 	sid = (data->token >> 8) & 0x0F;
 	if ((sid > 0 && sid <= SESSION_MAX))
-<<<<<<< HEAD
-		spin_lock(&(session[sid].session_lock));
-=======
 		spin_lock_irqsave(&(session[sid].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 
 	ac = q6asm_get_audio_client(sid);
 	if (!ac) {
 		pr_debug("%s: session[%d] already freed\n", __func__, sid);
 		if ((sid > 0 &&
 			sid <= SESSION_MAX))
-<<<<<<< HEAD
-			spin_unlock(&(session[sid].session_lock));
-=======
 			spin_unlock_irqrestore(
 				&(session[sid].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 		return 0;
 	}
 
@@ -1520,12 +1501,8 @@ static int32_t q6asm_srvc_callback(struct apr_client_data *data, void *priv)
 		}
 		if ((sid > 0 &&
 			sid <= SESSION_MAX))
-<<<<<<< HEAD
-			spin_unlock(&(session[sid].session_lock));
-=======
 			spin_unlock_irqrestore(
 				&(session[sid].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 		return 0;
 	}
 
@@ -1562,13 +1539,8 @@ static int32_t q6asm_srvc_callback(struct apr_client_data *data, void *priv)
 		ac->cb(data->opcode, data->token,
 			data->payload, ac->priv);
 	if ((sid > 0 && sid <= SESSION_MAX))
-<<<<<<< HEAD
-		spin_unlock(&(session[sid].session_lock));
-=======
 		spin_unlock_irqrestore(
 			&(session[sid].session_lock), flags);
->>>>>>> bq-bardock-o-beta
-
 	return 0;
 }
 
@@ -1647,10 +1619,7 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 	uint32_t *payload;
 	uint32_t wakeup_flag = 1;
 	int32_t  ret = 0;
-<<<<<<< HEAD
-=======
 	unsigned long flags;
->>>>>>> bq-bardock-o-beta
 	int session_id;
 
 	if (ac == NULL) {
@@ -1669,13 +1638,6 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 		return -EINVAL;
 	}
 
-<<<<<<< HEAD
-	spin_lock(&(session[session_id].session_lock));
-	if (!q6asm_is_valid_audio_client(ac)) {
-		pr_err("%s: audio client pointer is invalid, ac = %pK\n",
-				__func__, ac);
-		spin_unlock(&(session[session_id].session_lock));
-=======
 	spin_lock_irqsave(&(session[session_id].session_lock), flags);
 
 	if (!q6asm_is_valid_audio_client(ac)) {
@@ -1683,7 +1645,6 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 				__func__, ac);
 		spin_unlock_irqrestore(
 			&(session[session_id].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 		return -EINVAL;
 	}
 
@@ -1714,12 +1675,8 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 		atomic_set(&ac->cmd_state_pp, 0);
 		wake_up(&ac->time_wait);
 		wake_up(&ac->cmd_wait);
-<<<<<<< HEAD
-		spin_unlock(&(session[session_id].session_lock));
-=======
 		spin_unlock_irqrestore(
 			&(session[session_id].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 		return 0;
 	}
 
@@ -1733,12 +1690,8 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 	    (data->opcode != ASM_SESSION_EVENT_RX_UNDERFLOW)) {
 		if (payload == NULL) {
 			pr_err("%s: payload is null\n", __func__);
-<<<<<<< HEAD
-			spin_unlock(&(session[session_id].session_lock));
-=======
 			spin_unlock_irqrestore(
 				&(session[session_id].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 			return -EINVAL;
 		}
 		dev_vdbg(ac->dev, "%s: Payload = [0x%x] status[0x%x] opcode 0x%x\n",
@@ -1765,12 +1718,8 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 		ret = q6asm_is_valid_session(data, priv);
 		if (ret != 0) {
 			pr_err("%s: session invalid %d\n", __func__, ret);
-<<<<<<< HEAD
-			spin_unlock(&(session[session_id].session_lock));
-=======
 			spin_unlock_irqrestore(
 				&(session[session_id].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 			return ret;
 		}
 		case ASM_SESSION_CMD_SET_MTMX_STRTR_PARAMS_V2:
@@ -1805,14 +1754,9 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 								payload[1]);
 					wake_up(&ac->cmd_wait);
 				}
-<<<<<<< HEAD
-				spin_unlock(
-					&(session[session_id].session_lock));
-=======
 				spin_unlock_irqrestore(
 					&(session[session_id].session_lock),
 					flags);
->>>>>>> bq-bardock-o-beta
 				return 0;
 			}
 			if (payload[0] == ASM_STREAM_CMD_SET_PP_PARAMS_V2) {
@@ -1842,14 +1786,9 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 					atomic_set(&ac->mem_state, payload[1]);
 					wake_up(&ac->mem_wait);
 				}
-<<<<<<< HEAD
-				spin_unlock(
-					&(session[session_id].session_lock));
-=======
 				spin_unlock_irqrestore(
 					&(session[session_id].session_lock),
 					flags);
->>>>>>> bq-bardock-o-beta
 				return 0;
 			}
 			if (atomic_read(&ac->mem_state) && wakeup_flag) {
@@ -1887,12 +1826,8 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 			break;
 		}
 
-<<<<<<< HEAD
-		spin_unlock(&(session[session_id].session_lock));
-=======
 		spin_unlock_irqrestore(
 			&(session[session_id].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 		return 0;
 	}
 
@@ -1906,14 +1841,9 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 			if (port->buf == NULL) {
 				pr_err("%s: Unexpected Write Done\n",
 								__func__);
-<<<<<<< HEAD
-				spin_unlock(
-					&(session[session_id].session_lock));
-=======
 				spin_unlock_irqrestore(
 					&(session[session_id].session_lock),
 					flags);
->>>>>>> bq-bardock-o-beta
 				return -EINVAL;
 			}
 			spin_lock_irqsave(&port->dsp_lock, dsp_flags);
@@ -1927,14 +1857,9 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 					__func__, payload[0], payload[1]);
 				spin_unlock_irqrestore(&port->dsp_lock,
 								dsp_flags);
-<<<<<<< HEAD
-				spin_unlock(
-					&(session[session_id].session_lock));
-=======
 				spin_unlock_irqrestore(
 					&(session[session_id].session_lock),
 					flags);
->>>>>>> bq-bardock-o-beta
 				return -EINVAL;
 			}
 			token = data->token;
@@ -2006,14 +1931,9 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 		if (ac->io_mode & SYNC_IO_MODE) {
 			if (port->buf == NULL) {
 				pr_err("%s: Unexpected Write Done\n", __func__);
-<<<<<<< HEAD
-				spin_unlock(
-					&(session[session_id].session_lock));
-=======
 				spin_unlock_irqrestore(
 					&(session[session_id].session_lock),
 					flags);
->>>>>>> bq-bardock-o-beta
 				return -EINVAL;
 			}
 			spin_lock_irqsave(&port->dsp_lock, dsp_flags);
@@ -2100,12 +2020,8 @@ static int32_t q6asm_callback(struct apr_client_data *data, void *priv)
 	if (ac->cb)
 		ac->cb(data->opcode, data->token,
 			data->payload, ac->priv);
-<<<<<<< HEAD
-	spin_unlock(&(session[session_id].session_lock));
-=======
 	spin_unlock_irqrestore(
 		&(session[session_id].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 	return 0;
 }
 
@@ -2286,18 +2202,11 @@ static void __q6asm_add_hdr(struct audio_client *ac, struct apr_hdr *hdr,
 	dev_vdbg(ac->dev, "%s: pkt_size=%d cmd_flg=%d session=%d stream_id=%d\n",
 			__func__, pkt_size, cmd_flg, ac->session, stream_id);
 	mutex_lock(&ac->cmd_lock);
-<<<<<<< HEAD
-	spin_lock(&(session[ac->session].session_lock));
-	if (ac->apr == NULL) {
-		pr_err("%s: AC APR handle NULL", __func__);
-		spin_unlock(&(session[ac->session].session_lock));
-=======
 	spin_lock_irqsave(&(session[ac->session].session_lock), flags);
 	if (ac->apr == NULL) {
 		pr_err("%s: AC APR handle NULL", __func__);
 		spin_unlock_irqrestore(
 			&(session[ac->session].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 		mutex_unlock(&ac->cmd_lock);
 		return;
 	}
@@ -2315,12 +2224,8 @@ static void __q6asm_add_hdr(struct audio_client *ac, struct apr_hdr *hdr,
 		hdr->token = ac->session;
 	}
 	hdr->pkt_size  = pkt_size;
-<<<<<<< HEAD
-	spin_unlock(&(session[ac->session].session_lock));
-=======
 	spin_unlock_irqrestore(
 		&(session[ac->session].session_lock), flags);
->>>>>>> bq-bardock-o-beta
 	mutex_unlock(&ac->cmd_lock);
 	return;
 }
@@ -2718,11 +2623,6 @@ static int __q6asm_open_write(struct audio_client *ac, uint32_t format,
 	open.bits_per_sample = bits_per_sample;
 
 	open.postprocopo_id = q6asm_get_asm_topology_cal();
-<<<<<<< HEAD
-	if (ac->perf_mode != LEGACY_PCM_MODE)
-		open.postprocopo_id = ASM_STREAM_POSTPROCOPO_ID_NONE;
-=======
->>>>>>> bq-bardock-o-beta
 
 	pr_debug("%s: perf_mode %d asm_topology 0x%x bps %d\n", __func__,
 		 ac->perf_mode, open.postprocopo_id, open.bits_per_sample);

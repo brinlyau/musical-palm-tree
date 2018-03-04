@@ -2555,10 +2555,7 @@ int ipa_usb_xdci_suspend(u32 ul_clnt_hdl, u32 dl_clnt_hdl,
 
 	mutex_lock(&ipa3_usb_ctx->general_mutex);
 	IPA_USB_DBG_LOW("entry\n");
-<<<<<<< HEAD
-=======
 
->>>>>>> bq-bardock-o-beta
 	if (teth_prot < 0 || teth_prot >= IPA_USB_MAX_TETH_PROT_SIZE) {
 		IPA_USB_ERR("bad parameters.\n");
 		result = -EINVAL;

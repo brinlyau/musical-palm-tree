@@ -4411,12 +4411,7 @@ static int drm_property_replace_global_blob(struct drm_device *dev,
 	struct drm_property_blob *old_blob = NULL;
 	int ret;
 
-<<<<<<< HEAD
-	if (!length || !data || length > ULONG_MAX - sizeof(struct drm_property_blob))
-		return NULL;
-=======
 	WARN_ON(replace == NULL);
->>>>>>> bq-bardock-o-beta
 
 	old_blob = *replace;
 

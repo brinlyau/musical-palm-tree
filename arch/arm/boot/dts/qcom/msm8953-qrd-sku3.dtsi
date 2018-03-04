@@ -233,12 +233,11 @@
 */
 
 &int_codec {
-		status = "ok";
+	status = "ok";
 	/delete-property/ qcom,cdc-us-euro-gpios;
 	compatible = "qcom,msm8952-audio-codec";
 	qcom,model = "msm8952-snd-card-mtp";
-	//qcom,model = "msm8953-snd-card-mtp";
-	
+
 	reg =   <0xc051000 0x4>,
 		<0xc051004 0x4>,
 		<0xc055000 0x4>,
@@ -253,9 +252,6 @@
 	qcom,msm-hs-micbias-type = "external";//  internal
 	qcom,msm-mbhc-hphl-swh = <1>;
 	qcom,msm-mbhc-gnd-swh = <0>;   //0
-
-//	qcom,msm-micbias1-ext-cap;
-//	qcom,msm-micbias2-ext-cap;
 
 	qcom,audio-routing =
 		"RX_BIAS", "MCLK",
@@ -323,9 +319,9 @@
      &cdc_pdm_lines_2_act &cross_conn_det_sus 
      &pri_tlmm_lines_sus &pri_tlmm_ws_sus>; 
  pinctrl-2 = <&cdc_pdm_lines_sus
-     &quat_tlmm_lines_sus &quat_tlmm_ws_sus 
-     &cdc_pdm_lines_2_sus &cross_conn_det_act 
-     &pri_tlmm_lines_sus &pri_tlmm_ws_sus>; 
+     &quat_tlmm_lines_sus &quat_tlmm_ws_sus
+     &cdc_pdm_lines_2_sus &cross_conn_det_act
+     &pri_tlmm_lines_sus &pri_tlmm_ws_sus>;
  pinctrl-3 = <&cdc_pdm_lines_act
      &quat_tlmm_lines_sus &quat_tlmm_ws_sus 
      &cdc_pdm_lines_2_act &cross_conn_det_act 
@@ -470,8 +466,6 @@ qcom,hdmi-dba-codec-rx;
 		es9118,enable-gpio = <&tlmm 111 0>;
 		es9118,power-gpio = <&tlmm 138 0>;
 		es9118,cycle-gpio = <&tlmm 44 0>;
-	//			es9118,power-gpio = <&tlmm 44 0>;
-	//				es9118,cycle-gpio = <&tlmm 138 0>;
 		es9118,reset-gpio = <&tlmm 120 0>;
 	};
 

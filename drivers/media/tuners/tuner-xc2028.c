@@ -1401,9 +1401,6 @@ static int xc2028_set_config(struct dvb_frontend *fe, void *priv_cfg)
 	/*
 	 * Copy the config data.
 	 */
-<<<<<<< HEAD
-	memcpy(&priv->ctrl, p, sizeof(priv->ctrl));
-=======
 	kfree(priv->ctrl.fname);
 	priv->ctrl.fname = NULL;
 	memcpy(&priv->ctrl, p, sizeof(priv->ctrl));
@@ -1414,7 +1411,6 @@ static int xc2028_set_config(struct dvb_frontend *fe, void *priv_cfg)
 			goto unlock;
 		}
 	}
->>>>>>> bq-bardock-o-beta
 
 	/*
 	 * If firmware name changed, frees firmware. As free_firmware will

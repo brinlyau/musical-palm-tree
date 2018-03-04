@@ -21,11 +21,6 @@
 #define __ASM_SYSREG_H
 
 #include <linux/stringify.h>
-<<<<<<< HEAD
-
-#include <asm/opcodes.h>
-=======
->>>>>>> bq-bardock-o-beta
 
 #include <asm/opcodes.h>
 

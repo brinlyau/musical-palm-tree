@@ -446,14 +446,7 @@ static int qusb_phy_update_dpdm(struct usb_phy *phy, int value)
 			}
 
 			if (qphy->put_into_high_z_state) {
-<<<<<<< HEAD
-				if (qphy->tcsr_phy_lvl_shift_keeper)
-					writel_relaxed(0x1,
-					       qphy->tcsr_phy_lvl_shift_keeper);
-
-=======
 				qusb_phy_update_tcsr_level_shifter(qphy, 0x1);
->>>>>>> bq-bardock-o-beta
 				qusb_phy_gdsc(qphy, true);
 				qusb_phy_enable_clocks(qphy, true);
 
@@ -525,13 +518,7 @@ static int qusb_phy_update_dpdm(struct usb_phy *phy, int value)
 			}
 
 			if (!qphy->cable_connected) {
-<<<<<<< HEAD
-				if (qphy->tcsr_phy_lvl_shift_keeper)
-					writel_relaxed(0x0,
-					       qphy->tcsr_phy_lvl_shift_keeper);
-=======
 				qusb_phy_update_tcsr_level_shifter(qphy, 0x0);
->>>>>>> bq-bardock-o-beta
 				dev_dbg(phy->dev, "turn off for HVDCP case\n");
 				ret = qusb_phy_enable_power(qphy, false);
 			}
@@ -1047,11 +1034,7 @@ static int qusb_phy_set_suspend(struct usb_phy *phy, int suspend)
 
 
 			dev_dbg(phy->dev, "%s: intr_mask = %x\n",
-<<<<<<< HEAD
-			__func__, intr_mask);
-=======
 				__func__, intr_mask);
->>>>>>> bq-bardock-o-beta
 
 			/* Makes sure that above write goes through */
 			wmb();
@@ -1066,13 +1049,7 @@ static int qusb_phy_set_suspend(struct usb_phy *phy, int suspend)
 			wmb();
 
 			qusb_phy_enable_clocks(qphy, false);
-<<<<<<< HEAD
-			if (qphy->tcsr_phy_lvl_shift_keeper)
-				writel_relaxed(0x0,
-					qphy->tcsr_phy_lvl_shift_keeper);
-=======
 			qusb_phy_update_tcsr_level_shifter(qphy, 0x0);
->>>>>>> bq-bardock-o-beta
 			/* Do not disable power rails if there is vote for it */
 			if (!qphy->rm_pulldown)
 				qusb_phy_enable_power(qphy, false);
@@ -1099,13 +1076,7 @@ static int qusb_phy_set_suspend(struct usb_phy *phy, int suspend)
 				qphy->base + QUSB2PHY_PORT_INTR_CTRL);
 		} else {
 			qusb_phy_enable_power(qphy, true);
-<<<<<<< HEAD
-			if (qphy->tcsr_phy_lvl_shift_keeper)
-				writel_relaxed(0x1,
-					qphy->tcsr_phy_lvl_shift_keeper);
-=======
 			qusb_phy_update_tcsr_level_shifter(qphy, 0x1);
->>>>>>> bq-bardock-o-beta
 			qusb_phy_enable_clocks(qphy, true);
 		}
 		qphy->suspended = false;
@@ -1224,12 +1195,9 @@ static int qusb_phy_probe(struct platform_device *pdev)
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	qphy->scm_lvl_shifter_update = of_property_read_bool(dev->of_node,
 					"qcom,secure-level-shifter-update");
 
->>>>>>> bq-bardock-o-beta
 	qphy->dpdm_pulsing_enabled = of_property_read_bool(dev->of_node,
 					"qcom,enable-dpdm-pulsing");
 

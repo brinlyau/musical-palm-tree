@@ -835,31 +835,6 @@ int32_t msm_sensor_driver_probe(void *setting,
 		}
 	}
 
-<<<<<<< HEAD
-	CDBG("%s camera eeprom_name=%s\n",__func__, slave_info->eeprom_name);//slave_info is from userspace
-	CDBG("%s slave_info->sensor_name =%s\n",__func__, slave_info->sensor_name);//slave_info is from userspace
-	for(i=0; i<CAMERA_VENDOR_EEPROM_COUNT_MAX; i++){
-		//s_vendor_eeprom is from kernel camera dtsi
-		CDBG("dtsi eeprom_name[%d]=%s, module_id=%d\n",i,s_vendor_eeprom[i].eeprom_name, s_vendor_eeprom[i].module_id);
-		if(strcmp(slave_info->eeprom_name,s_vendor_eeprom[i].eeprom_name) == 0){
-			if(((strcmp(slave_info->sensor_name,"imx298_sunny") == 0) && (s_vendor_eeprom[i].module_id == MID_SUNNY))
-			|| ((strcmp(slave_info->sensor_name,"imx362_sunny") == 0) && (s_vendor_eeprom[i].module_id == MID_SUNNY))
-			|| ((strcmp(slave_info->sensor_name,"imx298_ofilm") == 0) && (s_vendor_eeprom[i].module_id == MID_OFILM))
-			|| ((strcmp(slave_info->sensor_name,"imx362_ofilm") == 0) && (s_vendor_eeprom[i].module_id == MID_OFILM))
-            || ((strcmp(slave_info->sensor_name,"s5k2l7") == 0) && (s_vendor_eeprom[i].module_id == MID_OFILM))
-			|| ((strcmp(slave_info->sensor_name,"imx219_fx219bh") == 0) && (s_vendor_eeprom[i].module_id == MID_SUNNY))
-			|| ((strcmp(slave_info->sensor_name,"imx219_l219a00") == 0) && (s_vendor_eeprom[i].module_id == MID_OFILM))
-            || ((strcmp(slave_info->sensor_name,"s5k4h8_OFF0380") == 0) && (s_vendor_eeprom[i].module_id == MID_OFILM))
-			){
-				CDBG("module found!probe continue!eeprom_name=%s\n", slave_info->eeprom_name);
-				break;
-			}
-		}
-	}
-	if(i >= CAMERA_VENDOR_EEPROM_COUNT_MAX){
-		pr_err("module not found!probe break!\n");
-		rc = -EFAULT;
-=======
 	if (strlen(slave_info->sensor_name) >= MAX_SENSOR_NAME ||
 		strlen(slave_info->eeprom_name) >= MAX_SENSOR_NAME ||
 		strlen(slave_info->actuator_name) >= MAX_SENSOR_NAME ||
@@ -872,7 +847,6 @@ int32_t msm_sensor_driver_probe(void *setting,
 			strlen(slave_info->actuator_name),
 			strlen(slave_info->ois_name));
 		rc = -EINVAL;
->>>>>>> bq-bardock-o-beta
 		goto free_slave_info;
 	}
 
@@ -1059,12 +1033,9 @@ CSID_TG:
 
 	pr_err("%s probe succeeded", slave_info->sensor_name);
 
-<<<<<<< HEAD
-=======
 	s_ctrl->bypass_video_node_creation =
 		slave_info->bypass_video_node_creation;
 
->>>>>>> bq-bardock-o-beta
 	/*
 	 * Update the subdevice id of flash-src based on availability in kernel.
 	 */

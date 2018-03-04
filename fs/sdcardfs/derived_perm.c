@@ -404,10 +404,6 @@ int is_obbpath_invalid(struct dentry *dent)
 				kfree(path_buf);
 			}
 
-<<<<<<< HEAD
-			//unlock_dir(lower_parent);
-=======
->>>>>>> bq-bardock-o-beta
 			pathcpy(&lower_path, &di->lower_path);
 			need_put = 1;
 		}

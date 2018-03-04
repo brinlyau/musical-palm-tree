@@ -3728,8 +3728,6 @@ static int ext4_fill_super(struct super_block *sb, void *data, int silent)
 		goto failed_mount;
 	}
 
-<<<<<<< HEAD
-=======
 	if (EXT4_HAS_INCOMPAT_FEATURE(sb, EXT4_FEATURE_INCOMPAT_ENCRYPT) &&
 	    es->s_encryption_level) {
 		ext4_msg(sb, KERN_ERR, "Unsupported encryption level %d",
@@ -3737,13 +3735,10 @@ static int ext4_fill_super(struct super_block *sb, void *data, int silent)
 		goto failed_mount;
 	}
 
->>>>>>> bq-bardock-o-beta
 	if (le16_to_cpu(sbi->s_es->s_reserved_gdt_blocks) > (blocksize / 4)) {
 		ext4_msg(sb, KERN_ERR,
 			 "Number of reserved GDT blocks insanely large: %d",
 			 le16_to_cpu(sbi->s_es->s_reserved_gdt_blocks));
-<<<<<<< HEAD
-=======
 		goto failed_mount;
 	}
 
@@ -3751,7 +3746,6 @@ static int ext4_fill_super(struct super_block *sb, void *data, int silent)
 	    es->s_encryption_level) {
 		ext4_msg(sb, KERN_ERR, "Unsupported encryption level %d",
 			 es->s_encryption_level);
->>>>>>> bq-bardock-o-beta
 		goto failed_mount;
 	}
 

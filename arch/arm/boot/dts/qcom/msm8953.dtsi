@@ -2109,6 +2109,7 @@ i2c_6: i2c@7af6000 { /* BLSP2 QUP2 */
 		interrupts = <0 136 0>, <0 220 0>, <0 134 0>;
 		interrupt-names = "hs_phy_irq", "ss_phy_irq", "pwr_event_irq";
 		qcom,usbin-vadc = <&pmi8950_vadc>;
+
 		USB3_GDSC-supply = <&gdsc_usb30>;
 		qcom,usb-dbm = <&dbm_1p5>;
 		qcom,msm-bus,name = "usb3";
@@ -2486,7 +2487,7 @@ i2c_6: i2c@7af6000 { /* BLSP2 QUP2 */
 
 		/* MPP4 - SUB_BOARD_THERM config */
 		qcom,mode = <4>; /* AIN input */
-		qcom,invert = <1>;  /* Enable MPP */
+		qcom,invert = <1>; /* Enable MPP */
 		qcom,ain-route = <3>; /* AMUX 8 */
 		qcom,master-en = <1>;
 		qcom,src-sel = <0>; /* Function constant */
@@ -2526,19 +2527,7 @@ i2c_6: i2c@7af6000 { /* BLSP2 QUP2 */
 		qcom,hw-settle-time = <2>;
 		qcom,fast-avg-setup = <0>;
 	};
-/*
-	chan@11 {
-		label = "pa_therm1";
-		reg = <0x11>;
-		qcom,decimation = <0>;
-		qcom,pre-div-channel-scaling = <0>;
-		qcom,calibration-type = "ratiometric";
-		qcom,scale-function = <2>;
-		qcom,hw-settle-time = <2>;
-		qcom,fast-avg-setup = <0>;
-		qcom,vadc-thermal-node;
-	};
-*/
+
 	chan@32 {
 		label = "xo_therm";
 		reg = <0x32>;

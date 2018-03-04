@@ -1508,21 +1508,12 @@ static struct packet_fanout *fanout_release(struct sock *sk)
 	f = po->fanout;
 	if (f) {
 		po->fanout = NULL;
-<<<<<<< HEAD
-
-		if (atomic_dec_and_test(&f->sk_ref)) {
-			list_del(&f->list);
-			dev_remove_pack(&f->prot_hook);
-			kfree(f);
-		}
-=======
 
 		if (atomic_dec_and_test(&f->sk_ref))
 			list_del(&f->list);
 		else
 			f = NULL;
 
->>>>>>> bq-bardock-o-beta
 	}
 	mutex_unlock(&fanout_mutex);
 

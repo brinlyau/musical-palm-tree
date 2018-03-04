@@ -2513,8 +2513,6 @@ static struct snd_soc_dai_link msm8952_dai[] = {
 		.ignore_pmdown_time = 1,
 		.be_id = MSM_FRONTEND_DAI_QCHAT,
 	},
-<<<<<<< HEAD
-	// add here 
 	{ /* hw:x,38 */
 		.name = "QUIN_MI2S Hostless",
 		.stream_name = "QUIN_MI2S Hostless",
@@ -2530,7 +2528,6 @@ static struct snd_soc_dai_link msm8952_dai[] = {
 		.ignore_pmdown_time = 1,
 		.codec_dai_name = "snd-soc-dummy-dai",
 		.codec_name = "snd-soc-dummy",
-=======
 	{/* hw:x,38 */
 		.name = "MSM8X16 Compress10",
 		.stream_name = "Compress10",
@@ -2605,7 +2602,6 @@ static struct snd_soc_dai_link msm8952_dai[] = {
 		.ignore_suspend = 1,
 		.ignore_pmdown_time = 1,
 		.be_id = MSM_FRONTEND_DAI_MULTIMEDIA29,
->>>>>>> bq-bardock-o-beta
 	},
 	/* Backend I2S DAI Links */
 	{

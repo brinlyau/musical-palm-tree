@@ -71,13 +71,8 @@ Required properties:
 			"qcom,gpucc-8996-pro"
 			"qcom,gcc-gfx-8953"
 			"qcom,gcc-gfx-sdm450"
-<<<<<<< HEAD
-			"qcom,gcc-californium"
-			"qcom,cc-debug-californium"
-=======
 			"qcom,gcc-9650"
 			"qcom,cc-debug-9650"
->>>>>>> bq-bardock-o-beta
 			"qcom,gcc-mdm9607"
 			"qcom,cc-debug-mdm9607"
 			"qcom,gcc-cobalt"

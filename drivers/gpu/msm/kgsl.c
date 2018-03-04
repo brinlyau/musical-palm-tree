@@ -3933,14 +3933,6 @@ int kgsl_device_platform_probe(struct kgsl_device *device)
 	if (status != 0)
 		goto error_close_mmu;
 
-<<<<<<< HEAD
-	status = kgsl_allocate_global(device, &device->scratch,
-		PAGE_SIZE, 0, 0, "scratch");
-	if (status != 0)
-		goto error_free_memstore;
-
-=======
->>>>>>> bq-bardock-o-beta
 	/*
 	 * The default request type PM_QOS_REQ_ALL_CORES is
 	 * applicable to all CPU cores that are online and

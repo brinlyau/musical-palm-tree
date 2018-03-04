@@ -1245,12 +1245,6 @@ static int diagfwd_mux_close(int id, int mode)
 		 */
 	} else {
 		/*
-<<<<<<< HEAD
-		* With clearing of masks on ODL exit and
-		* USB disconnection, closing of the channel is
-		* not needed.This enables read and drop of stale packets.
-		*/
-=======
 		 * With sysfs parameter to clear masks set,
 		 * peripheral masks are cleared on ODL exit and
 		 * USB disconnection and buffers are not marked busy.
@@ -1267,7 +1261,6 @@ static int diagfwd_mux_close(int id, int mode)
 				diagfwd_close(i, TYPE_CMD);
 			}
 		}
->>>>>>> bq-bardock-o-beta
 		/* Re enable HDLC encoding */
 		pr_debug("diag: In %s, re-enabling HDLC encoding\n",
 		       __func__);

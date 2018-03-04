@@ -118,14 +118,11 @@ enum {
 };
 
 enum {
-<<<<<<< HEAD
-=======
 	MDSS_PANEL_LOW_PERSIST_MODE_OFF = 0,
 	MDSS_PANEL_LOW_PERSIST_MODE_ON,
 };
 
 enum {
->>>>>>> bq-bardock-o-beta
 	MODE_GPIO_NOT_VALID = 0,
 	MODE_GPIO_HIGH,
 	MODE_GPIO_LOW,
@@ -751,12 +748,9 @@ struct mdss_panel_info {
 	/* debugfs structure for the panel */
 	struct mdss_panel_debugfs_info *debugfs_info;
 
-<<<<<<< HEAD
-=======
 	/* persistence mode on/off */
 	bool persist_mode;
 
->>>>>>> bq-bardock-o-beta
 	/* HDR properties of display panel*/
 	struct mdss_panel_hdr_properties hdr_properties;
 };

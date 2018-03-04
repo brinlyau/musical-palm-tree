@@ -44,8 +44,6 @@
 	};
 };
 
-<<<<<<< HEAD
-=======
 &modem_mem {
 	reg = <0x0 0x86c00000 0x0 0x1e00000>;
 };
@@ -71,7 +69,6 @@
 	};
 };
 
->>>>>>> bq-bardock-o-beta
 /{
 	mtp_batterydata: qcom,battery-data {
 		qcom,batt-id-range-pct = <15>;

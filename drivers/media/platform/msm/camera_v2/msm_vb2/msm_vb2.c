@@ -254,22 +254,9 @@ static struct vb2_buffer *msm_vb2_get_buf(int session_id,
 	struct msm_session *session;
 	struct msm_vb2_buffer *msm_vb2 = NULL;
 	unsigned long flags, rl_flags;
-<<<<<<< HEAD
 
 	session = msm_get_session(session_id);
 	if (IS_ERR_OR_NULL(session))
-		return NULL;
-
-	read_lock_irqsave(&session->stream_rwlock, rl_flags);
-
-	stream = msm_get_stream(session, stream_id);
-	if (IS_ERR_OR_NULL(stream)) {
-		read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
-=======
-
-	session = msm_get_session(session_id);
-	if (IS_ERR_OR_NULL(session))
->>>>>>> bq-bardock-o-beta
 		return NULL;
 	}
 
@@ -304,10 +291,7 @@ static struct vb2_buffer *msm_vb2_get_buf(int session_id,
 end:
 	spin_unlock_irqrestore(&stream->stream_lock, flags);
 	read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
-<<<<<<< HEAD
 
-=======
->>>>>>> bq-bardock-o-beta
 	return vb2_buf;
 }
 
@@ -319,11 +303,6 @@ static struct vb2_buffer *msm_vb2_get_buf_by_idx(int session_id,
 	struct msm_session *session;
 	struct msm_vb2_buffer *msm_vb2 = NULL;
 	unsigned long flags, rl_flags;
-<<<<<<< HEAD
-
-	session = msm_get_session(session_id);
-	if (IS_ERR_OR_NULL(session))
-=======
 
 	session = msm_get_session(session_id);
 	if (IS_ERR_OR_NULL(session))
@@ -335,7 +314,6 @@ static struct vb2_buffer *msm_vb2_get_buf_by_idx(int session_id,
 
 	if (IS_ERR_OR_NULL(stream)) {
 		read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
->>>>>>> bq-bardock-o-beta
 		return NULL;
 	}
 
@@ -369,10 +347,7 @@ static struct vb2_buffer *msm_vb2_get_buf_by_idx(int session_id,
 end:
 	spin_unlock_irqrestore(&stream->stream_lock, flags);
 	read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
-<<<<<<< HEAD
 
-=======
->>>>>>> bq-bardock-o-beta
 	return vb2_buf;
 }
 
@@ -389,8 +364,6 @@ static int msm_vb2_put_buf(struct vb2_buffer *vb, int session_id,
 
 	session = msm_get_session(session_id);
 	if (IS_ERR_OR_NULL(session))
-<<<<<<< HEAD
-=======
 		return -EINVAL;
 
 	read_lock_irqsave(&session->stream_rwlock, rl_flags);
@@ -398,7 +371,6 @@ static int msm_vb2_put_buf(struct vb2_buffer *vb, int session_id,
 	stream = msm_get_stream(session, stream_id);
 	if (IS_ERR_OR_NULL(stream)) {
 		read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
->>>>>>> bq-bardock-o-beta
 		return -EINVAL;
 	}
 

@@ -1423,8 +1423,6 @@ static long rndis_qc_ioctl(struct file *fp, unsigned cmd, unsigned long arg)
 	}
 
 	spin_lock_irqsave(&rndis_lock, flags);
-<<<<<<< HEAD
-
 	if (!_rndis_qc) {
 		pr_err("rndis_qc_dev not present\n");
 		ret = -ENODEV;
@@ -1432,16 +1430,6 @@ static long rndis_qc_ioctl(struct file *fp, unsigned cmd, unsigned long arg)
 	}
 	rndis_qc_unlock(&_rndis_qc->ioctl_excl);
 
-=======
-
-	if (!_rndis_qc) {
-		pr_err("rndis_qc_dev not present\n");
-		ret = -ENODEV;
-		goto fail;
-	}
-	rndis_qc_unlock(&_rndis_qc->ioctl_excl);
-
->>>>>>> bq-bardock-o-beta
 fail:
 	spin_unlock_irqrestore(&rndis_lock, flags);
 	return ret;

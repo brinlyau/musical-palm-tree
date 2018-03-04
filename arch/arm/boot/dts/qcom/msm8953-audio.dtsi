@@ -137,7 +137,7 @@
 
 &ext_codec {
 	qcom,model = "msm8953-tasha-snd-card";
-	status = "disabled"; 
+	status = "disabled";
 	qcom,cdc-us-euro-gpios = <&tlmm 63 0>;
 	qcom,msm-mbhc-hphl-swh = <0>;
 	qcom,msm-mbhc-gnd-swh = <0>;

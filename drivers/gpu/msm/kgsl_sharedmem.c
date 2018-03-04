@@ -605,29 +605,6 @@ static int kgsl_do_cache_op(struct page *page, void *addr,
 				addr = kmap_atomic(page);
 				cache_op(addr + offset, addr + offset + len);
 				kunmap_atomic(addr);
-<<<<<<< HEAD
-
-				size -= len;
-				offset = 0;
-			} while (size);
-
-			return 0;
-		}
-
-		addr = page_address(page);
-	}
-
-	cache_op(addr + offset, addr + offset + (size_t) size);
-	return 0;
-}
-
-int kgsl_cache_range_op(struct kgsl_memdesc *memdesc, uint64_t offset,
-		uint64_t size, unsigned int op)
-{
-	void *addr = NULL;
-	int ret = 0;
-
-=======
 
 				size -= len;
 				offset = 0;
@@ -652,7 +629,6 @@ int kgsl_cache_range_op(struct kgsl_memdesc *memdesc, uint64_t offset,
 	unsigned int i, pos = 0;
 	int ret = 0;
 
->>>>>>> bq-bardock-o-beta
 	if (size == 0 || size > UINT_MAX)
 		return -EINVAL;
 
@@ -678,56 +654,6 @@ int kgsl_cache_range_op(struct kgsl_memdesc *memdesc, uint64_t offset,
 	 * If the buffer is not to mapped to kernel, perform cache
 	 * operations after mapping to kernel.
 	 */
-<<<<<<< HEAD
-	if (memdesc->sgt != NULL) {
-		struct scatterlist *sg;
-		unsigned int i, pos = 0;
-
-		for_each_sg(memdesc->sgt->sgl, sg, memdesc->sgt->nents, i) {
-			uint64_t sg_offset, sg_left;
-
-			if (offset >= (pos + sg->length)) {
-				pos += sg->length;
-				continue;
-			}
-			sg_offset = offset > pos ? offset - pos : 0;
-			sg_left = (sg->length - sg_offset > size) ? size :
-						sg->length - sg_offset;
-			ret = kgsl_do_cache_op(sg_page(sg), NULL, sg_offset,
-								sg_left, op);
-			size -= sg_left;
-			if (size == 0)
-				break;
-			pos += sg->length;
-		}
-	} else if (memdesc->pages != NULL) {
-		addr = vmap(memdesc->pages, memdesc->page_count,
-				VM_IOREMAP, pgprot_writecombine(PAGE_KERNEL));
-		if (addr == NULL)
-			return -ENOMEM;
-
-		/* Make sure the offset + size do not overflow the address */
-		if (addr + ((size_t) offset + (size_t) size) < addr)
-			return -ERANGE;
-
-		ret = kgsl_do_cache_op(NULL, addr, offset, size, op);
-		vunmap(addr);
-	}
-	return ret;
-}
-EXPORT_SYMBOL(kgsl_cache_range_op);
-
-#ifndef CONFIG_ALLOC_BUFFERS_IN_4K_CHUNKS
-static inline int get_page_size(size_t size, unsigned int align)
-{
-	return (align >= ilog2(SZ_64K) && size >= SZ_64K)
-					? SZ_64K : PAGE_SIZE;
-}
-#else
-static inline int get_page_size(size_t size, unsigned int align)
-{
-	return PAGE_SIZE;
-=======
 	if (memdesc->sgt != NULL)
 		sgt = memdesc->sgt;
 	else {
@@ -761,7 +687,6 @@ static inline int get_page_size(size_t size, unsigned int align)
 		kgsl_free_sgt(sgt);
 
 	return ret;
->>>>>>> bq-bardock-o-beta
 }
 EXPORT_SYMBOL(kgsl_cache_range_op);
 
@@ -908,12 +833,9 @@ kgsl_sharedmem_page_alloc_user(struct kgsl_memdesc *memdesc,
 		len -= page_size;
 		memdesc->size += page_size;
 		memdesc->page_count += page_count;
-<<<<<<< HEAD
-=======
 
 		/* Get the needed page size for the next iteration */
 		page_size = kgsl_get_page_size(len, align);
->>>>>>> bq-bardock-o-beta
 	}
 
 	/* Call to the hypervisor to lock any secure buffer allocations */

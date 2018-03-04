@@ -599,11 +599,7 @@ gps_send_cpkt_response(void *gr, void *buf, size_t len)
 
 	dev = port_to_gps(gr);
 
-<<<<<<< HEAD
-	pr_debug("%s: dev:%pK\n", __func__, dev);
-=======
 	pr_debug_ratelimited("%s: dev:%pK\n", __func__, dev);
->>>>>>> bq-bardock-o-beta
 
 	if (!atomic_read(&dev->online) || !atomic_read(&dev->ctrl_online)) {
 		gps_free_ctrl_pkt(cpkt);

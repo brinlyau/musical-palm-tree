@@ -91,7 +91,6 @@
 				};
 			};
 		hall_int_pin {
-		//	qcom,pins = <&gp 13>;
 			pins = "gpio13";
 			qcom,pin-func = <0>;
 			qcom,num-grp-pins = <1>;
@@ -1214,32 +1213,32 @@ i2c_6 {
 			};
 		};
 
- pri-tlmm-lines { 
-      pri_tlmm_lines_act: pri_tlmm_lines_act { 
-        mux { 
+		pri-tlmm-lines {
+			pri_tlmm_lines_act: pri_tlmm_lines_act {
+				mux {
+					pins = "gpio91", "gpio93", "gpio88"; 
+					function = "pri_mi2s";
+				};
+
+				config {
+					pins = "gpio91", "gpio93", "gpio88";
+					drive-strength = <8>;
+		};
+      };
+
+		pri_tlmm_lines_sus: pri_tlmm_lines_sus {
+				mux {
+		pins = "gpio91", "gpio93", "gpio88";
+          function = "pri_mi2s";
+        };
+
+        config {
          pins = "gpio91", "gpio93", "gpio88"; 
-          function = "pri_mi2s"; 
+          drive-strength = <2>;
+          bias-pull-down;
         }; 
-  
-        config { 
-         pins = "gpio91", "gpio93", "gpio88"; 
-          drive-strength = <8>; 
-        }; 
-      }; 
-  
-      pri_tlmm_lines_sus: pri_tlmm_lines_sus { 
-        mux { 
-         pins = "gpio91", "gpio93", "gpio88"; 
-          function = "pri_mi2s"; 
-        }; 
-  
-        config { 
-         pins = "gpio91", "gpio93", "gpio88"; 
-          drive-strength = <2>; 
-          bias-pull-down; 
-        }; 
-      }; 
-    }; 
+      };
+    };
     
 		pri-tlmm-ws-lines {
 			pri_tlmm_ws_act: pri_tlmm_ws_act {

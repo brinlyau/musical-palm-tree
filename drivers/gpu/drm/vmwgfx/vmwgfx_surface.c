@@ -914,10 +914,6 @@ vmw_surface_handle_reference(struct vmw_private *dev_priv,
 		if (unlikely(ret != 0))
 			return ret;
 	} else {
-<<<<<<< HEAD
-		if (unlikely(drm_is_render_client(file_priv)))
-			require_exist = true;
-=======
 		if (unlikely(drm_is_render_client(file_priv))) {
 			DRM_ERROR("Render client refused legacy "
 				  "surface reference.\n");
@@ -928,7 +924,6 @@ vmw_surface_handle_reference(struct vmw_private *dev_priv,
 				  "surface reference.\n");
 			return -EACCES;
 		}
->>>>>>> bq-bardock-o-beta
 
 		handle = u_handle;
 	}

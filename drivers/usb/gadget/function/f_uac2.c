@@ -155,8 +155,6 @@ struct audio_dev {
 
 	/* The ALSA Sound Card it represents on the USB-Client side */
 	struct snd_uac2_chip uac2;
-<<<<<<< HEAD
-=======
 
 	/* Workqueue for handling uevents */
 	struct workqueue_struct *uevent_wq;
@@ -165,7 +163,6 @@ struct audio_dev {
 	struct delayed_work c_work;
 	struct work_struct  disconnect_work;
 
->>>>>>> bq-bardock-o-beta
 	struct device *gdev;
 };
 

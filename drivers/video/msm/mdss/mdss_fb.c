@@ -4317,10 +4317,6 @@ static int mdss_fb_handle_buf_sync_ioctl(struct msm_sync_pt_data *sync_pt_data,
 		goto buf_sync_err_3;
 	}
 
-<<<<<<< HEAD
-	sync_fence_install(rel_fence, rel_fen_fd);
-=======
->>>>>>> bq-bardock-o-beta
 	sync_fence_install(retire_fence, retire_fen_fd);
 
 skip_retire_fence:
@@ -4475,14 +4471,10 @@ static int mdss_fb_atomic_commit_ioctl(struct fb_info *info,
 	struct mdp_input_layer __user *input_layer_list;
 	struct mdp_output_layer *output_layer = NULL;
 	struct mdp_output_layer __user *output_layer_user;
-<<<<<<< HEAD
-	struct msm_fb_data_type *mfd;
-=======
 	struct mdp_frc_info *frc_info = NULL;
 	struct mdp_frc_info __user *frc_info_user;
 	struct msm_fb_data_type *mfd;
 	struct mdss_overlay_private *mdp5_data = NULL;
->>>>>>> bq-bardock-o-beta
 
 	ret = copy_from_user(&commit, argp, sizeof(struct mdp_layer_commit));
 	if (ret) {
@@ -4494,11 +4486,6 @@ static int mdss_fb_atomic_commit_ioctl(struct fb_info *info,
 	if (!mfd)
 		return -EINVAL;
 
-<<<<<<< HEAD
-	if (mfd->panel_info->panel_dead) {
-		pr_debug("early commit return\n");
-		MDSS_XLOG(mfd->panel_info->panel_dead);
-=======
 	mdp5_data = mfd_to_mdp5_data(mfd);
 
 	if (mfd->panel_info->panel_dead) {
@@ -4513,7 +4500,6 @@ static int mdss_fb_atomic_commit_ioctl(struct fb_info *info,
 			mfd->mdp.signal_retire_fence && mdp5_data)
 			mfd->mdp.signal_retire_fence(mfd,
 						mdp5_data->retire_cnt);
->>>>>>> bq-bardock-o-beta
 		return 0;
 	}
 
@@ -4768,15 +4754,12 @@ static int __ioctl_wait_idle(struct msm_fb_data_type *mfd, u32 cmd)
 	return ret;
 }
 
-<<<<<<< HEAD
-=======
 #ifdef TARGET_HW_MDSS_MDP3
 static bool check_not_supported_ioctl(u32 cmd)
 {
 	return false;
 }
 #else
->>>>>>> bq-bardock-o-beta
 static bool check_not_supported_ioctl(u32 cmd)
 {
 	return((cmd == MSMFB_OVERLAY_SET) || (cmd == MSMFB_OVERLAY_UNSET) ||
@@ -4785,10 +4768,7 @@ static bool check_not_supported_ioctl(u32 cmd)
 		(cmd == MSMFB_BUFFER_SYNC) || (cmd == MSMFB_OVERLAY_QUEUE) ||
 		(cmd == MSMFB_NOTIFY_UPDATE));
 }
-<<<<<<< HEAD
-=======
 #endif
->>>>>>> bq-bardock-o-beta
 
 /*
  * mdss_fb_do_ioctl() - MDSS Framebuffer ioctl function

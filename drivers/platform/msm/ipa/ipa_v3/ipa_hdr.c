@@ -348,10 +348,6 @@ static int __ipa_add_hdr_proc_ctx(struct ipa_hdr_proc_ctx_add *proc_ctx,
 	}
 
 	hdr_entry = ipa3_id_find(proc_ctx->hdr_hdl);
-<<<<<<< HEAD
-	if (!hdr_entry || (hdr_entry->cookie != IPA_HDR_COOKIE)) {
-		IPAERR_RL("hdr_hdl is invalid\n");
-=======
 	if (!hdr_entry) {
 		IPAERR_RL("hdr_hdl is invalid\n");
 		return -EINVAL;
@@ -359,7 +355,6 @@ static int __ipa_add_hdr_proc_ctx(struct ipa_hdr_proc_ctx_add *proc_ctx,
 	if (hdr_entry->cookie != IPA_HDR_COOKIE) {
 		IPAERR_RL("Invalid header cookie %u\n", hdr_entry->cookie);
 		WARN_ON(1);
->>>>>>> bq-bardock-o-beta
 		return -EINVAL;
 	}
 	IPADBG("Associated header is name=%s is_hdr_proc_ctx=%d\n",
@@ -396,14 +391,6 @@ static int __ipa_add_hdr_proc_ctx(struct ipa_hdr_proc_ctx_add *proc_ctx,
 	mem_size = (ipa3_ctx->hdr_proc_ctx_tbl_lcl) ?
 		IPA_MEM_PART(apps_hdr_proc_ctx_size) :
 		IPA_MEM_PART(apps_hdr_proc_ctx_size_ddr);
-<<<<<<< HEAD
-	if (htbl->end + ipa_hdr_proc_ctx_bin_sz[bin] > mem_size) {
-		IPAERR_RL("hdr proc ctx table overflow\n");
-		goto bad_len;
-	}
-
-=======
->>>>>>> bq-bardock-o-beta
 	if (list_empty(&htbl->head_free_offset_list[bin])) {
 		if (htbl->end + ipa_hdr_proc_ctx_bin_sz[bin] > mem_size) {
 			IPAERR_RL("hdr proc ctx table overflow\n");
@@ -453,12 +440,7 @@ static int __ipa_add_hdr_proc_ctx(struct ipa_hdr_proc_ctx_add *proc_ctx,
 	return 0;
 
 ipa_insert_failed:
-<<<<<<< HEAD
-	if (offset)
-		list_move(&offset->link,
-=======
 	list_move(&offset->link,
->>>>>>> bq-bardock-o-beta
 		&htbl->head_free_offset_list[offset->bin]);
 	entry->offset_entry = NULL;
 	list_del(&entry->link);
@@ -623,13 +605,10 @@ ipa_insert_failed:
 	}
 	htbl->hdr_cnt--;
 	list_del(&entry->link);
-<<<<<<< HEAD
-=======
 
 fail_dma_mapping:
 	entry->is_hdr_proc_ctx = false;
 
->>>>>>> bq-bardock-o-beta
 bad_hdr_len:
 	entry->cookie = 0;
 	kmem_cache_free(ipa3_ctx->hdr_cache, entry);

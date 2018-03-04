@@ -53,8 +53,6 @@
 
 };
 
-<<<<<<< HEAD
-=======
 &rpm_bus {
 	rpm-regulator-ldoa18 {
 		compatible = "qcom,rpm-smd-regulator-resource";
@@ -158,7 +156,6 @@
 	};
 };
 
->>>>>>> bq-bardock-o-beta
 /{
 	mtp_batterydata: qcom,battery-data {
 		qcom,batt-id-range-pct = <15>;

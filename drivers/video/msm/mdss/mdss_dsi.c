@@ -439,16 +439,8 @@ int mdss_dsi_panel_power_ctrl(struct mdss_panel_data *pdata,
 		return 0;
 	}
 
-<<<<<<< HEAD
-	//for truly panel power on TP 3.3V first
-	if(power_state==1){
-		gpio_direction_output(110,1);
-	} else {
-	}
-=======
 	ctrl_pdata = container_of(pdata, struct mdss_dsi_ctrl_pdata,
 				panel_data);
->>>>>>> bq-bardock-o-beta
 
 	/*
 	 * If a dynamic mode switch is pending, the regulators should not

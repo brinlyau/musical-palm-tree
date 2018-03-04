@@ -1758,11 +1758,7 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 		kgid_t gid_max = make_kgid(&init_user_ns, info->gid_max);
 		set_sk_callback_lock = true;
 		read_lock_bh(&sk->sk_callback_lock);
-<<<<<<< HEAD
-		MT_DEBUG("qtaguid[%d]: sk=%p->sk_socket=%p->file=%p\n",
-=======
 		MT_DEBUG("qtaguid[%d]: sk=%pK->sk_socket=%pK->file=%pK\n",
->>>>>>> bq-bardock-o-beta
 			 par->hooknum, sk, sk->sk_socket,
 			 sk->sk_socket ? sk->sk_socket->file : (void *)-1LL);
 		filp = sk->sk_socket ? sk->sk_socket->file : NULL;
@@ -2229,11 +2225,7 @@ static int ctrl_cmd_tag(const char *input)
 			from_kuid(&init_user_ns, current_fsuid()));
 		goto err;
 	}
-<<<<<<< HEAD
-	CT_DEBUG("qtaguid: ctrl_tag(%s): socket->...->sk_refcnt=%d ->sk=%p\n",
-=======
 	CT_DEBUG("qtaguid: ctrl_tag(%s): socket->...->sk_refcnt=%d ->sk=%pk\n",
->>>>>>> bq-bardock-o-beta
 		 input, atomic_read(&el_socket->sk->sk_refcnt),
 		 el_socket->sk);
 	if (argc < 3) {
@@ -2333,11 +2325,7 @@ static int ctrl_cmd_tag(const char *input)
 	}
 	spin_unlock_bh(&sock_tag_list_lock);
 	/* We keep the ref to the sk until it is untagged */
-<<<<<<< HEAD
-	CT_DEBUG("qtaguid: ctrl_tag(%s): done st@%p ...->sk_refcnt=%d\n",
-=======
 	CT_DEBUG("qtaguid: ctrl_tag(%s): done st@%pk ...->sk_refcnt=%d\n",
->>>>>>> bq-bardock-o-beta
 		 input, sock_tag_entry,
 		 atomic_read(&el_socket->sk->sk_refcnt));
 	sockfd_put(el_socket);
@@ -2446,11 +2434,7 @@ int qtaguid_untag(struct socket *el_socket, bool kernel)
 	 * Release the sock_fd that was grabbed at tag time.
 	 */
 	sock_put(sock_tag_entry->sk);
-<<<<<<< HEAD
-	CT_DEBUG("qtaguid: done. st@%p ...->sk_refcnt=%d\n",
-=======
 	CT_DEBUG("qtaguid: done. st@%pk ...->sk_refcnt=%d\n",
->>>>>>> bq-bardock-o-beta
 		 sock_tag_entry,
 		 atomic_read(&el_socket->sk->sk_refcnt));
 

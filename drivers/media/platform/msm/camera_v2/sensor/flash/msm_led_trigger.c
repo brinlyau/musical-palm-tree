@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -21,12 +21,6 @@
 #undef CDBG
 #define CDBG(fmt, args...) pr_debug(fmt, ##args)
 
-<<<<<<< HEAD
-extern int32_t msm_led_torch_create_classdev(
-				struct platform_device *pdev, void *data);
-
-=======
->>>>>>> bq-bardock-o-beta
 static enum flash_type flashtype;
 static struct msm_led_flash_ctrl_t fctrl;
 
@@ -34,21 +28,12 @@ static int32_t msm_led_trigger_get_subdev_id(struct msm_led_flash_ctrl_t *fctrl,
 	void *arg)
 {
 	uint32_t *subdev_id = (uint32_t *)arg;
-<<<<<<< HEAD
-=======
 
->>>>>>> bq-bardock-o-beta
 	if (!subdev_id) {
 		pr_err("%s:%d failed\n", __func__, __LINE__);
 		return -EINVAL;
 	}
 	*subdev_id = fctrl->pdev->id;
-<<<<<<< HEAD
-	pr_debug("%s:%d subdev_id %d\n", __func__, __LINE__, *subdev_id);
-	return 0;
-}
-
-=======
 	CDBG("%s:%d subdev_id %d\n", __func__, __LINE__, *subdev_id);
 	return 0;
 }
@@ -74,7 +59,6 @@ static int32_t msm_led_trigger_release(struct msm_led_flash_ctrl_t *fctrl)
 	return rc;
 }
 
->>>>>>> bq-bardock-o-beta
 static int32_t msm_led_trigger_config(struct msm_led_flash_ctrl_t *fctrl,
 	void *data)
 {
@@ -82,12 +66,8 @@ static int32_t msm_led_trigger_config(struct msm_led_flash_ctrl_t *fctrl,
 	struct msm_camera_led_cfg_t *cfg = (struct msm_camera_led_cfg_t *)data;
 	uint32_t i;
 	uint32_t curr_l, max_curr_l;
-<<<<<<< HEAD
-	pr_debug("called led_state %d\n", cfg->cfgtype);
-=======
 
 	CDBG("called led_state %d\n", cfg->cfgtype);
->>>>>>> bq-bardock-o-beta
 
 	if (!fctrl) {
 		pr_err("failed\n");
@@ -161,11 +141,7 @@ static int32_t msm_led_trigger_config(struct msm_led_flash_ctrl_t *fctrl,
 		rc = -EFAULT;
 		break;
 	}
-<<<<<<< HEAD
-	pr_debug("flash_set_led_state: return %d\n", rc);
-=======
 	CDBG("flash_set_led_state: return %d\n", rc);
->>>>>>> bq-bardock-o-beta
 	return rc;
 }
 
@@ -174,19 +150,6 @@ static const struct of_device_id msm_led_trigger_dt_match[] = {
 	{}
 };
 
-<<<<<<< HEAD
-MODULE_DEVICE_TABLE(of, msm_led_trigger_dt_match);
-
-static struct platform_driver msm_led_trigger_driver = {
-	.driver = {
-		.name = FLASH_NAME,
-		.owner = THIS_MODULE,
-		.of_match_table = msm_led_trigger_dt_match,
-	},
-};
-
-=======
->>>>>>> bq-bardock-o-beta
 static int32_t msm_led_trigger_probe(struct platform_device *pdev)
 {
 	int32_t rc = 0, rc_1 = 0, i = 0;
@@ -195,13 +158,8 @@ static int32_t msm_led_trigger_probe(struct platform_device *pdev)
 	uint32_t count = 0;
 	struct led_trigger *temp = NULL;
 
-<<<<<<< HEAD
-	pr_debug("called\n");
- printk("zgy msm_led_trigger_probe 01\n");
-=======
 	CDBG("called\n");
 
->>>>>>> bq-bardock-o-beta
 	if (!of_node) {
 		pr_err("of_node NULL\n");
 		return -EINVAL;
@@ -216,13 +174,8 @@ static int32_t msm_led_trigger_probe(struct platform_device *pdev)
 		pr_err("failed\n");
 		return -EINVAL;
 	}
-<<<<<<< HEAD
-	pr_debug("pdev id %d\n", pdev->id);
-printk("zgy msm_led_trigger_probe 02 pdev id %d\n", pdev->id);
-=======
 	CDBG("pdev id %d\n", pdev->id);
 
->>>>>>> bq-bardock-o-beta
 	rc = of_property_read_u32(of_node,
 			"qcom,flash-type", &flashtype);
 	if (rc < 0) {
@@ -233,12 +186,7 @@ printk("zgy msm_led_trigger_probe 02 pdev id %d\n", pdev->id);
 	/* Flash source */
 	if (of_get_property(of_node, "qcom,flash-source", &count)) {
 		count /= sizeof(uint32_t);
-<<<<<<< HEAD
-		pr_debug("qcom,flash-source count %d\n", count);
-printk("zgy msm_led_trigger_probe 03 qcom,flash-source count %d\n", count);
-=======
 		CDBG("qcom,flash-source count %d\n", count);
->>>>>>> bq-bardock-o-beta
 		if (count > MAX_LED_TRIGGERS) {
 			pr_err("invalid count qcom,flash-source %d\n", count);
 			return -EINVAL;
@@ -265,16 +213,9 @@ printk("zgy msm_led_trigger_probe 03 qcom,flash-source count %d\n", count);
 				continue;
 			}
 
-<<<<<<< HEAD
-			pr_debug("default trigger %s\n",
-				fctrl.flash_trigger_name[i]);
-printk("zgy msm_led_trigger_probe 04 default trigger %s\n",
-				fctrl.flash_trigger_name[i]);
-=======
 			CDBG("default trigger %s\n",
 				fctrl.flash_trigger_name[i]);
 
->>>>>>> bq-bardock-o-beta
 			if (flashtype == GPIO_FLASH) {
 				/* use fake current */
 				fctrl.flash_op_current[i] = LED_FULL;
@@ -294,16 +235,9 @@ printk("zgy msm_led_trigger_probe 04 default trigger %s\n",
 
 			of_node_put(flash_src_node);
 
-<<<<<<< HEAD
-			pr_debug("max_current[%d] %d\n",
-				i, fctrl.flash_op_current[i]);
-printk("zgy msm_led_trigger_probe 05 max_current[%d] %d\n",
-				i, fctrl.flash_op_current[i]);
-=======
 			CDBG("max_current[%d] %d\n",
 				i, fctrl.flash_op_current[i]);
 
->>>>>>> bq-bardock-o-beta
 			led_trigger_register_simple(fctrl.flash_trigger_name[i],
 				&fctrl.flash_trigger[i]);
 
@@ -316,12 +250,7 @@ printk("zgy msm_led_trigger_probe 05 max_current[%d] %d\n",
 	/* Torch source */
 	if (of_get_property(of_node, "qcom,torch-source", &count)) {
 		count /= sizeof(uint32_t);
-<<<<<<< HEAD
-		pr_debug("qcom,torch-source count %d\n", count);
-printk("zgy msm_led_trigger_probe 06 qcom,torch-source count %d\n", count);
-=======
 		CDBG("qcom,torch-source count %d\n", count);
->>>>>>> bq-bardock-o-beta
 		if (count > MAX_LED_TRIGGERS) {
 			pr_err("invalid count qcom,torch-source %d\n", count);
 			return -EINVAL;
@@ -348,14 +277,8 @@ printk("zgy msm_led_trigger_probe 06 qcom,torch-source count %d\n", count);
 				of_node_put(flash_src_node);
 				continue;
 			}
-<<<<<<< HEAD
-printk("zgy msm_led_trigger_probe 07 default trigger %s\n",
-				fctrl.torch_trigger_name[i]);
-			pr_debug("default trigger %s\n",
-=======
 
 			CDBG("default trigger %s\n",
->>>>>>> bq-bardock-o-beta
 				fctrl.torch_trigger_name[i]);
 
 			if (flashtype == GPIO_FLASH) {
@@ -377,16 +300,9 @@ printk("zgy msm_led_trigger_probe 07 default trigger %s\n",
 
 			of_node_put(flash_src_node);
 
-<<<<<<< HEAD
-			pr_debug("torch max_current[%d] %d\n",
-				i, fctrl.torch_op_current[i]);
-printk("zgy msm_led_trigger_probe 08 torch max_current[%d] %d\n",
-				i, fctrl.torch_op_current[i]);
-=======
 			CDBG("torch max_current[%d] %d\n",
 				i, fctrl.torch_op_current[i]);
 
->>>>>>> bq-bardock-o-beta
 			led_trigger_register_simple(fctrl.torch_trigger_name[i],
 				&fctrl.torch_trigger[i]);
 
@@ -397,23 +313,6 @@ printk("zgy msm_led_trigger_probe 08 torch max_current[%d] %d\n",
 	}
 
 	rc = msm_led_flash_create_v4lsubdev(pdev, &fctrl);
-<<<<<<< HEAD
-printk("zgy msm_led_trigger_probe 09 rc = %d\n",rc);
-	if (!rc)
-		msm_led_torch_create_classdev(pdev, &fctrl);
-	return rc;
-}
-
-static int __init msm_led_trigger_add_driver(void)
-{
-    int led_trigger;
-	pr_debug("called\n");
-printk("zgy__init msm_led_trigger_add_driver01\n");
-    led_trigger = platform_driver_probe(&msm_led_trigger_driver,
-		msm_led_trigger_probe);
-printk("zgy__init msm_led_trigger_add_driver02 %d\n",led_trigger);
-	return led_trigger;
-=======
 	if (!rc)
 		msm_led_torch_create_classdev(pdev, &fctrl);
 
@@ -435,16 +334,12 @@ static int __init msm_led_trigger_add_driver(void)
 {
 	CDBG("called\n");
 	return platform_driver_register(&msm_led_trigger_driver);
->>>>>>> bq-bardock-o-beta
 }
 
 static struct msm_flash_fn_t msm_led_trigger_func_tbl = {
 	.flash_get_subdev_id = msm_led_trigger_get_subdev_id,
 	.flash_led_config = msm_led_trigger_config,
-<<<<<<< HEAD
-=======
 	.flash_led_release = msm_led_trigger_release,
->>>>>>> bq-bardock-o-beta
 };
 
 static struct msm_led_flash_ctrl_t fctrl = {

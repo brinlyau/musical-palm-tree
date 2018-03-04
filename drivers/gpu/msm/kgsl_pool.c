@@ -21,11 +21,6 @@
 #include "kgsl_device.h"
 #include "kgsl_pool.h"
 
-<<<<<<< HEAD
-/*
- * Maximum pool size in terms of pages
- * = (Number of pools * Max size per pool)
-=======
 #define KGSL_MAX_POOLS 4
 #define KGSL_MAX_POOL_ORDER 8
 #define KGSL_MAX_RESERVED_PAGES 4096
@@ -39,7 +34,6 @@
  * from system memory
  * @list_lock: Spinlock for page list in the pool
  * @page_list: List of pages held/reserved in this pool
->>>>>>> bq-bardock-o-beta
  */
 #define KGSL_POOL_MAX_PAGES (2 * 4096)
 
@@ -53,26 +47,9 @@ struct kgsl_page_pool {
 	struct list_head page_list;
 };
 
-<<<<<<< HEAD
-static struct kgsl_page_pool kgsl_pools[] = {
-	{
-		.pool_order = 0,
-		.list_lock = __SPIN_LOCK_UNLOCKED(kgsl_pools[0].list_lock),
-		.page_list = LIST_HEAD_INIT(kgsl_pools[0].page_list),
-	},
-#ifndef CONFIG_ALLOC_BUFFERS_IN_4K_CHUNKS
-	{
-		.pool_order = 4,
-		.list_lock = __SPIN_LOCK_UNLOCKED(kgsl_pools[1].list_lock),
-		.page_list = LIST_HEAD_INIT(kgsl_pools[1].page_list),
-	},
-#endif
-};
-=======
 static struct kgsl_page_pool kgsl_pools[KGSL_MAX_POOLS];
 static int kgsl_num_pools;
 static int kgsl_pool_max_pages;
->>>>>>> bq-bardock-o-beta
 
 
 /* Returns KGSL pool corresponding to input page order*/
@@ -316,12 +293,6 @@ int kgsl_pool_alloc_page(int page_size, struct page **pages,
 	if ((pages == NULL) || pages_len < (page_size >> PAGE_SHIFT))
 		return -EINVAL;
 
-<<<<<<< HEAD
-	pool = _kgsl_get_pool_from_order(get_order(page_size));
-
-	if (pool == NULL)
-		return -EINVAL;
-=======
 	/* If the pool is not configured get pages from the system */
 	if (!kgsl_num_pools) {
 		gfp_t gfp_mask = kgsl_gfp_mask(order);
@@ -360,18 +331,11 @@ int kgsl_pool_alloc_page(int page_size, struct page **pages,
 			goto done;
 		}
 	}
->>>>>>> bq-bardock-o-beta
 
 	page = _kgsl_pool_get_page(pool);
 
 	/* Allocate a new page if not allocated from pool */
 	if (page == NULL) {
-<<<<<<< HEAD
-		gfp_t gfp_mask = kgsl_gfp_mask(get_order(page_size));
-
-		page = alloc_pages(gfp_mask,
-					get_order(page_size));
-=======
 		gfp_t gfp_mask = kgsl_gfp_mask(order);
 
 		/* Only allocate non-reserved memory for certain pools */
@@ -392,18 +356,13 @@ int kgsl_pool_alloc_page(int page_size, struct page **pages,
 			} else
 				return -ENOMEM;
 		}
->>>>>>> bq-bardock-o-beta
 
 		if (!page)
 			return -ENOMEM;
 	}
 
-<<<<<<< HEAD
-	for (j = 0; j < (page_size >> PAGE_SHIFT); j++) {
-=======
 done:
 	for (j = 0; j < (*page_size >> PAGE_SHIFT); j++) {
->>>>>>> bq-bardock-o-beta
 		p = nth_page(page, j);
 		pages[pcount] = p;
 		pcount++;
@@ -428,12 +387,8 @@ void kgsl_pool_free_page(struct page *page)
 
 	page_order = compound_order(page);
 
-<<<<<<< HEAD
-	if (kgsl_pool_size_total() < kgsl_pool_max_pages) {
-=======
 	if (!kgsl_pool_max_pages ||
 			(kgsl_pool_size_total() < kgsl_pool_max_pages)) {
->>>>>>> bq-bardock-o-beta
 		pool = _kgsl_get_pool_from_order(page_order);
 		if (pool != NULL) {
 			_kgsl_pool_add_page(pool, page);

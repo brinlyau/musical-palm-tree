@@ -1262,8 +1262,6 @@ int ipa3_add_rt_rule(struct ipa_ioc_add_rt_rule *rules)
 
 	if (rules == NULL || rules->num_rules == 0 || rules->ip >= IPA_IP_MAX) {
 		IPAERR_RL("bad parm\n");
-<<<<<<< HEAD
-=======
 		return -EINVAL;
 	}
 
@@ -1309,7 +1307,6 @@ int ipa3_add_rt_rule_ext(struct ipa_ioc_add_rt_rule_ext *rules)
 
 	if (rules == NULL || rules->num_rules == 0 || rules->ip >= IPA_IP_MAX) {
 		IPAERR("bad parm\n");
->>>>>>> bq-bardock-o-beta
 		return -EINVAL;
 	}
 
@@ -1318,12 +1315,8 @@ int ipa3_add_rt_rule_ext(struct ipa_ioc_add_rt_rule_ext *rules)
 		if (__ipa_add_rt_rule(rules->ip, rules->rt_tbl_name,
 					&rules->rules[i].rule,
 					rules->rules[i].at_rear,
-<<<<<<< HEAD
-					&rules->rules[i].rt_rule_hdl)) {
-=======
 					&rules->rules[i].rt_rule_hdl,
 					rules->rules[i].rule_id)) {
->>>>>>> bq-bardock-o-beta
 			IPAERR_RL("failed to add rt rule %d\n", i);
 			rules->rules[i].status = IPA_RT_STATUS_OF_ADD_FAILED;
 		} else {
@@ -1753,10 +1746,7 @@ int ipa3_put_rt_tbl(u32 rt_tbl_hdl)
 		ip = IPA_IP_v6;
 	else {
 		WARN_ON(1);
-<<<<<<< HEAD
-=======
 		result = -EINVAL;
->>>>>>> bq-bardock-o-beta
 		goto ret;
 	}
 
