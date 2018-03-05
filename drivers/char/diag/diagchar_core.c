@@ -421,27 +421,6 @@ void diag_clear_masks(struct diag_md_session_t *info)
 	"diag:%s: masks cleared successfully\n", __func__);
 }
 
-void diag_clear_masks(struct diag_md_session_t *info)
-{
-	int ret;
-	char cmd_disable_log_mask[] = { 0x73, 0, 0, 0, 0, 0, 0, 0};
-	char cmd_disable_msg_mask[] = { 0x7D, 0x05, 0, 0, 0, 0, 0, 0};
-	char cmd_disable_event_mask[] = { 0x60, 0};
-
-	DIAG_LOG(DIAG_DEBUG_PERIPHERALS,
-	"diag: %s: masks clear request upon %s\n", __func__,
-	((info) ? "ODL exit" : "USB Disconnection"));
-
-	ret = diag_process_apps_masks(cmd_disable_log_mask,
-			sizeof(cmd_disable_log_mask), info);
-	ret = diag_process_apps_masks(cmd_disable_msg_mask,
-			sizeof(cmd_disable_msg_mask), info);
-	ret = diag_process_apps_masks(cmd_disable_event_mask,
-			sizeof(cmd_disable_event_mask), info);
-	DIAG_LOG(DIAG_DEBUG_PERIPHERALS,
-	"diag:%s: masks cleared successfully\n", __func__);
-}
-
 static void diag_close_logging_process(const int pid)
 {
 	int i;

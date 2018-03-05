@@ -258,7 +258,6 @@ static struct vb2_buffer *msm_vb2_get_buf(int session_id,
 	session = msm_get_session(session_id);
 	if (IS_ERR_OR_NULL(session))
 		return NULL;
-	}
 
 	read_lock_irqsave(&session->stream_rwlock, rl_flags);
 
@@ -291,7 +290,6 @@ static struct vb2_buffer *msm_vb2_get_buf(int session_id,
 end:
 	spin_unlock_irqrestore(&stream->stream_lock, flags);
 	read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
-
 	return vb2_buf;
 }
 
@@ -307,15 +305,6 @@ static struct vb2_buffer *msm_vb2_get_buf_by_idx(int session_id,
 	session = msm_get_session(session_id);
 	if (IS_ERR_OR_NULL(session))
 		return NULL;
-
-	read_lock_irqsave(&session->stream_rwlock, rl_flags);
-
-	stream = msm_get_stream(session, stream_id);
-
-	if (IS_ERR_OR_NULL(stream)) {
-		read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
-		return NULL;
-	}
 
 	read_lock_irqsave(&session->stream_rwlock, rl_flags);
 
@@ -347,10 +336,8 @@ static struct vb2_buffer *msm_vb2_get_buf_by_idx(int session_id,
 end:
 	spin_unlock_irqrestore(&stream->stream_lock, flags);
 	read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
-
 	return vb2_buf;
 }
-
 
 static int msm_vb2_put_buf(struct vb2_buffer *vb, int session_id,
 				unsigned int stream_id)
@@ -365,14 +352,6 @@ static int msm_vb2_put_buf(struct vb2_buffer *vb, int session_id,
 	session = msm_get_session(session_id);
 	if (IS_ERR_OR_NULL(session))
 		return -EINVAL;
-
-	read_lock_irqsave(&session->stream_rwlock, rl_flags);
-
-	stream = msm_get_stream(session, stream_id);
-	if (IS_ERR_OR_NULL(stream)) {
-		read_unlock_irqrestore(&session->stream_rwlock, rl_flags);
-		return -EINVAL;
-	}
 
 	read_lock_irqsave(&session->stream_rwlock, rl_flags);
 

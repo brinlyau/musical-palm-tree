@@ -19,7 +19,6 @@
 #include <linux/mm.h>
 #include <linux/fs.h>
 #include <linux/sched.h>
-
 #include <linux/module.h>
 #include <linux/cdev.h>
 #include <linux/list.h>
@@ -268,12 +267,6 @@ static struct fastrpc_channel_ctx gcinfo[NUM_CHANNELS] = {
 		.subsys = "dsps",
 		.channel = SMD_APPS_DSPS,
 		.edge = "dsps",
-	},
-	{
-		.name = "mdsprpc-smd",
-		.subsys = "mdsp",
-		.channel = SMD_APPS_MODEM,
-		.edge = "mdsp",
 	},
 	{
 		.name = "mdsprpc-smd",

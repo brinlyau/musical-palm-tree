@@ -1225,6 +1225,8 @@ static int diagfwd_mux_open(int id, int mode)
 
 static int diagfwd_mux_close(int id, int mode)
 {
+	uint8_t i;
+
 	switch (mode) {
 	case DIAG_USB_MODE:
 		driver->usb_connected = 0;

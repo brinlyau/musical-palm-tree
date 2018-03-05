@@ -2528,6 +2528,7 @@ static struct snd_soc_dai_link msm8952_dai[] = {
 		.ignore_pmdown_time = 1,
 		.codec_dai_name = "snd-soc-dummy-dai",
 		.codec_name = "snd-soc-dummy",
+	},
 	{/* hw:x,38 */
 		.name = "MSM8X16 Compress10",
 		.stream_name = "Compress10",

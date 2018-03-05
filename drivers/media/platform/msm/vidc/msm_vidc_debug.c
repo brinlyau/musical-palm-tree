@@ -294,11 +294,6 @@ static int publish_unreleased_reference(struct msm_vidc_inst *inst,
 	*dbuf = cur;
 	return 0;
 }
-void put_inst_helper(struct kref *kref)
-{
-        struct msm_vidc_inst *inst = container_of(kref,
-                        struct msm_vidc_inst, kref);
-
 
 static void put_inst_helper(struct kref *kref)
 {

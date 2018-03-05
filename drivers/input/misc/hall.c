@@ -34,6 +34,9 @@
 #define GPIO_HALL_EINT_PIN 107
 #define CONFIG_HALL_SYS
 
+#define KEY_HALL_OPEN	0x222
+#define KEY_HALL_CLOSE	0x223
+
 struct hall_switch_info
 {
 	struct mutex io_lock;

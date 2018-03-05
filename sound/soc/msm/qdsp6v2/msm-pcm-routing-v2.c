@@ -2045,12 +2045,6 @@ static int msm_routing_lsm_port_put(struct snd_kcontrol *kcontrol,
 
 	pr_debug("%s: LSM enable %ld\n", __func__,
 			ucontrol->value.integer.value[0]);
-
-	if (mux >= ARRAY_SIZE(mad_audio_mux_text)){
-		pr_err(" %s: invalid mux value %d\n", __func__, mux);
-		return -EINVAL;
-	}
-
 	switch (ucontrol->value.integer.value[0]) {
 	case 1:
 		lsm_port = AFE_PORT_ID_SLIMBUS_MULTI_CHAN_0_TX;

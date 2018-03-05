@@ -600,7 +600,6 @@ static int __ipa_add_hdr_proc_ctx(struct ipa_hdr_proc_ctx_add *proc_ctx,
 	mem_size = (ipa_ctx->hdr_proc_ctx_tbl_lcl) ?
 		IPA_MEM_PART(apps_hdr_proc_ctx_size) :
 		IPA_MEM_PART(apps_hdr_proc_ctx_size_ddr);
-
 	if (list_empty(&htbl->head_free_offset_list[bin])) {
 		if (htbl->end + ipa_hdr_proc_ctx_bin_sz[bin] > mem_size) {
 			IPAERR_RL("hdr proc ctx table overflow\n");
