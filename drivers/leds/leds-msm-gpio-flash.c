@@ -145,24 +145,7 @@ printk("zgy led_gpio_flash_probe 02 rc = %d,temp_str = %s\n",rc,temp_str);
 		pr_err("%s:failed to get pinctrl\n", __func__);
 		return PTR_ERR(flash_led->pinctrl);
 	}
-printk("zgy led_gpio_flash_probe 022 rc = %d,flash_led->pinctrl = %p\n",rc,flash_led->pinctrl);
-	
-	//if(flash_led->pinctrl->state != NULL)
-	//	printk("flash_led->pinctrl->state = %s\n",flash_led->pinctrl->state->name);
-
-/*
-	flash_led->gpio_state_default = pinctrl_lookup_state(flash_led->pinctrl,
-		"flash_default");
-	if (IS_ERR(flash_led->gpio_state_default)) {
-		pr_err("%s:can not get active pinstate\n", __func__);
-		return -EINVAL;
-	}
-
-	rc = pinctrl_select_state(flash_led->pinctrl,
-		flash_led->gpio_state_default);
-	if (rc)
-		pr_err("%s:set state failed!\n", __func__);
-*/
+	printk("zgy led_gpio_flash_probe 022 rc = %d,flash_led->pinctrl = %p\n",rc,flash_led->pinctrl);
 
 	flash_led->flash_en = of_get_named_gpio(node, "qcom,flash-en", 0);
 	if (flash_led->flash_en < 0) {
@@ -198,7 +181,7 @@ printk("zgy led_gpio_flash_probe 022 rc = %d,flash_led->pinctrl = %p\n",rc,flash
 	}
 
 	rc = of_property_read_string(node, "linux,name", &flash_led->cdev.name);
-printk( "zgy of_property_read_string rc = %d\n",rc);
+	printk( "zgy of_property_read_string rc = %d\n",rc);
 	if (rc) {
 		dev_err(&pdev->dev, "%s: Failed to read linux name. rc = %d\n",
 			__func__, rc);
@@ -324,7 +307,7 @@ static int __init led_gpio_flash_init(void)
     leds_flash = platform_driver_register(&led_gpio_flash_driver);
     printk("zgy_init led_gpio_flash_init02:%d\n",leds_flash);
 	return leds_flash;
-    
+
 }
 
 static void __exit led_gpio_flash_exit(void)

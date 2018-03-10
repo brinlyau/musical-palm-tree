@@ -205,7 +205,7 @@ static int usb_notifier_call(struct notifier_block *usb_nb, unsigned long event,
 	struct usb_temp_device_info *di = container_of(usb_nb, struct usb_temp_device_info, usb_nb);
 	enum power_supply_type type = ((enum power_supply_type)event);
 	pr_err("usb_temp.%s:%d\n", __func__, type);
-	
+
 	charge_type_handler(di, type);
 	return NOTIFY_OK;
 }
@@ -230,7 +230,7 @@ static int get_batt_temp_value(void)
 {
 	int rc = 0;
 	union power_supply_propval ret = {0, };
-	
+
 	if((g_di == NULL)||(g_di->batt_psy == NULL) ||(g_di->bms_psy == NULL))
 	{
 		pr_err("usb_temp. %s g_di is NULL!\n",__func__);
@@ -290,13 +290,13 @@ static void set_interval(struct usb_temp_device_info* di, int temp)
 static void protection_process(struct usb_temp_device_info* di, int temp, int usb_temp)
 {
 	int gpio_value = 0;
-	
+
 	if(NULL == di)
 	{
 		pr_err("usb_temp. %s di is NULL!\n",__func__);
 		return;
 	}
-	
+
 	gpio_value = gpio_get_value(di->gpio_usb_temp);
 	if ((temp >= di->open_mosfet_temp) && (usb_temp >= di->need_protect_temp)){
 		usb_temp_wake_lock();
@@ -314,16 +314,16 @@ static void check_temperature(struct usb_temp_device_info* di)
 	int tusb = 0;
 	int tbatt = 0;
 	int tdiff = 0;
-	
+
 	if(NULL == di)
 	{
 		pr_err("usb_temp. %s di is NULL!\n", __func__);
 		return;
 	}
-	
+
 	tusb = get_usb_temp_value(di);
 	tbatt = get_batt_temp_value();
-	
+
 	pr_info("usb_temp.tusb = %d, tbatt = %d\n", tusb, tbatt);
 	tdiff = tusb - tbatt;
 	if(INVALID_BATT_TEMP == tbatt)
@@ -331,11 +331,11 @@ static void check_temperature(struct usb_temp_device_info* di)
 		tdiff = INVALID_DELTA_TEMP;
 		pr_err("usb_temp.get battery adc temp err, not care!!!\n");
 	}
-	
+
 	if (tdiff >= di->open_mosfet_temp) {
 		// try do something
 	}
-	
+
 	set_interval(di, tdiff);
 	protection_process(di, tdiff, tusb);
 }
@@ -345,12 +345,12 @@ static void usb_temp_check_work(struct work_struct *work)
 	int interval = 0;
 	int type = 0;
 	type = get_power_supply_info(di->usb_psy, POWER_SUPPLY_PROP_TYPE);
-	
+
 #ifdef CONFIG_HLTHERM_RUNTEST
 		pr_info("usb_temp.Disable HLTHERM protect\n");
 		return;
 #endif
-	
+
 	if (((USB_TEMP_DEFAULT_CHK_CNT == di->keep_check_cnt) && (POWER_SUPPLY_TYPE_UNKNOWN == type)))
 	{
 		protect_dmd_notify_enable = TRUE;
@@ -362,10 +362,10 @@ static void usb_temp_check_work(struct work_struct *work)
 		pr_err("usb_temp.chargertype is %d,stop checking\n", type);
 		return;
 	}
-	
+
 	check_temperature(di);
 	interval = di->check_interval;
-	
+
 	hrtimer_start(&di->timer, ktime_set(interval/MSEC_PER_SEC, (interval % MSEC_PER_SEC) * USEC_PER_SEC), HRTIMER_MODE_REL);
 
 }
@@ -373,7 +373,7 @@ static void usb_temp_check_work(struct work_struct *work)
 static enum hrtimer_restart usb_temp_timer_func(struct hrtimer *timer)
 {
 	struct usb_temp_device_info *di = NULL;
-	
+
 	di = container_of(timer, struct usb_temp_device_info, timer);
 	queue_work(di->usb_temp_wq, &di->usb_temp_check_wk);
 	return HRTIMER_NORESTART;
@@ -384,7 +384,7 @@ static void check_ntc_error(struct usb_temp_device_info* di)
 	int temp = 0;
 	int sum = 0;
 	int i = 0;
-	
+
 	for (i = 0; i < USB_TEMP_CNT; ++i)
 	{
 		sum += get_usb_temp_value(di);
@@ -432,7 +432,7 @@ static int usb_temp_probe(struct platform_device *pdev)
 		pr_err("usb_temp.bms supply not found deferring probe\\n");
 		return -EPROBE_DEFER;
 	}
-	
+
 	np = pdev->dev.of_node;
 	if(NULL == np)
 	{
@@ -444,7 +444,7 @@ static int usb_temp_probe(struct platform_device *pdev)
 	{
 		pr_err("usb_temp.di is NULL\n");
 		return -ENOMEM;
-	
+
 	}
 	di->dev = &pdev->dev;
 	dev_set_drvdata(&(pdev->dev), di);
@@ -471,7 +471,7 @@ static int usb_temp_probe(struct platform_device *pdev)
 		goto free_mem;
 	}
 	pr_info("usb_temp.gpio_usb_temp = %d\n", di->gpio_usb_temp);
-	
+
 	ret = gpio_request(di->gpio_usb_temp, "usb_temp_protect");
 	if (ret)
 	{
@@ -480,7 +480,7 @@ static int usb_temp_probe(struct platform_device *pdev)
 		goto free_mem;
 	}
 	gpio_direction_output(di->gpio_usb_temp, GPIO_LOW);
-	
+
 	ret = of_property_read_u32(np, "shamrock,no_need_usb_temp", &(di->no_need_usb_temp));
 	if (ret)
 	{
@@ -532,15 +532,15 @@ static int usb_temp_probe(struct platform_device *pdev)
 		goto free_gpio;
 	}
 	pr_info("usb_temp.interval_switch_temp = %d\n", di->interval_switch_temp);
-	
+
 	check_ntc_error(di);
 	batt_present = get_power_supply_info(batt_psy, POWER_SUPPLY_PROP_PRESENT);
-	
+
 	if(is_factory_mode || (di->no_need_usb_temp == TRUE))
 	{
 		need_usb_temp = FALSE;
 	}
-	
+
 	if ((!batt_present) || (FALSE == need_usb_temp)) {
 		pr_err("usb_temp.battery is not exist or no need usb_temp in factory mode, disable usb short protect!\n");
 		protect_enable = FALSE;
@@ -562,15 +562,15 @@ static int usb_temp_probe(struct platform_device *pdev)
 		ret = -EINVAL;
 		goto free_gpio;
 	}
-	
+
 	type = get_power_supply_info(usb_psy, POWER_SUPPLY_PROP_TYPE);
-	
+
 	pr_info("usb_temp.usb type = %d\n", type);
 	charge_type_handler(di, type);
-	
+
 	pr_info("usb_temp.usb_temp probe ok!\n");
 	return 0;
-	
+
 	free_gpio:
 	gpio_free(di->gpio_usb_temp);
 	free_mem:
@@ -583,11 +583,11 @@ static int usb_temp_probe(struct platform_device *pdev)
 static int usb_temp_remove(struct platform_device *pdev)
 {
 	struct usb_temp_device_info *di = dev_get_drvdata(&pdev->dev);
-	
+
 	gpio_free(di->gpio_usb_temp);
 	kfree(di);
 	g_di = NULL;
-	
+
 	return 0;
 }
 static struct of_device_id usb_temp_match_table[] =
@@ -621,4 +621,4 @@ static void __exit usb_temp_exit(void)
 	platform_driver_unregister(&usb_temp_driver);
 }
 
-module_exit(usb_temp_exit); 
+module_exit(usb_temp_exit);

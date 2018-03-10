@@ -42,13 +42,10 @@
 
 #define KTD_I2C_NAME			"ktd2026"
 
-
-
-
- enum led_colors {
-	RED ,
-	GREEN ,
-	BLUE ,
+enum led_colors {
+	RED,
+	GREEN,
+	BLUE,
 };
 
 
@@ -101,16 +98,6 @@ struct ktd20xx_led {
 /*	KTD core functions					*/
 /*--------------------------------------------------------------*/
 
-/*
-static int ktd20xx_read_reg(struct i2c_client *client, u8 reg)
-{
-	int value = i2c_smbus_read_byte_data(client, reg);
-	if (value < 0)
-		dev_err(&client->dev, "%s: read reg 0x%x err! value=0x%x\n",__func__, reg, value);
-
-	return value;
-}
-*/
 static int ktd20xx_write_reg(struct i2c_client *client, u8 reg, u8 val)
 {
 	int ret = i2c_smbus_write_byte_data(client, reg, val);
@@ -124,18 +111,8 @@ static int ktd20xx_write_reg(struct i2c_client *client, u8 reg, u8 val)
 	return ret;
 }
 
-
-/*
-static int ktd20xx_turn_off_all_leds(struct ktd20xx_led *led)
-{
-	int ret = 0;
-       ret =  i2c_smbus_write_byte_data(led->client, 0x00, 0x08);//Device OFF-Either SCL goes low or SDA stops toggling
-	usleep(5);
-	return ret;
-}
-*/
 static int ktd20xx_turn_on_led(struct ktd20xx_led *led, enum led_colors color)
-{	
+{
 	u8 state_led = 0x00;
 	int ret = 0;
 
@@ -162,13 +139,13 @@ static int ktd20xx_turn_on_led(struct ktd20xx_led *led, enum led_colors color)
 
 	if (led->state_ledb == KTD_BLINK)
 		state_led |= 0x20;
-	
+
 	ret = ktd20xx_write_reg(led->client, KTD_REG_LEDE, state_led);
 
 	if (state_led == 0x00) {
 		ret = ktd20xx_write_reg(led->client, KTD_REG_RSTR, 0x08);
 	}
-	
+
 	//usleep(5);
 	return ret;
 }
@@ -176,15 +153,6 @@ static int ktd20xx_turn_off_led(struct ktd20xx_led *led, enum led_colors color)
 {
 	return ktd20xx_turn_on_led(led, color);
 }
-/*
-static int ktd20xx_turn_on_all_leds(struct ktd20xx_led *led)
-{
-	int ret = 0;
-	ret = ktd20xx_write_reg(led->client, KTD_REG_LEDE, 0x07);
-	usleep(5);
-	return ret;
-}
-*/
 
 #define LED_VTG_MAX_UV		3300000
 #define LED_VTG_MIN_UV		2600000
@@ -193,7 +161,7 @@ static int ktd20xx_turn_on_all_leds(struct ktd20xx_led *led)
 int ktd20xx_power_on(struct ktd20xx_led *led, int enable)
 {
 	int ret = 0;
-	
+
 	led->vdd = regulator_get(&led->client->dev, "vdd");
 	if (IS_ERR(led->vdd)) {
 		ret = -1;
@@ -201,7 +169,7 @@ int ktd20xx_power_on(struct ktd20xx_led *led, int enable)
 			"Regulator get failed vdd ret=%d\n", ret);
 		return ret;
 	}
-			
+
 	if (regulator_count_voltages(led->vdd) > 0) {
 		ret = regulator_set_voltage(led->vdd, LED_VTG_MIN_UV,	LED_VTG_MAX_UV);
 		if (ret) {
@@ -210,15 +178,14 @@ int ktd20xx_power_on(struct ktd20xx_led *led, int enable)
 			goto reg_vdd_put;
 		}
 	}
-	
+
 	led->vcc_i2c = regulator_get(&led->client->dev, "vcc_i2c");
 	if (IS_ERR(led->vcc_i2c)) {
 		ret = PTR_ERR(led->vcc_i2c);
 		dev_err(&led->client->dev,
 			"Regulator get failed vcc_i2c rc=%d\n", ret);
-		//goto reg_vdd_set_vtg;
 	}
-		
+
 	if (regulator_count_voltages(led->vcc_i2c) > 0) {
 		ret = regulator_set_voltage(led->vcc_i2c, LED_I2C_VTG_MIN_UV, LED_I2C_VTG_MAX_UV);
 		if (ret) {
@@ -228,10 +195,7 @@ int ktd20xx_power_on(struct ktd20xx_led *led, int enable)
 		}
 	}
 
-	//if(!enable)
-		//goto disable_power;
-
-	ret = regulator_enable(led->vdd);		
+	ret = regulator_enable(led->vdd);
 	if (ret) {
 		dev_err(&led->client->dev,
 			"Regulator vdd enable failed ret=%d\n", ret);
@@ -278,7 +242,6 @@ static int ktd20xx_set_led_brightness(struct ktd20xx_led *led, enum led_colors c
  		printk(KERN_ERR "%s %d color %d value %d \n", __func__, __LINE__, color, value);
 
 	}
-//	ret = ktd20xx_write_reg(led->client, KTD_REG_LCFG+color, (u8)(0x60 |led->pdata[color].led_current));  //mod=direct turn on/off
 	ret |= ktd20xx_write_reg(led->client, KTD_REG_RSTR, 0x00);
 	ret |= ktd20xx_write_reg(led->client, KTD_REG_LCFG+color, (u8)value);
 	ret |= ktd20xx_turn_on_led(led, color);
@@ -297,10 +260,10 @@ static void ktd20xx_set_ledr_brightness(struct led_classdev *led_cdev, enum led_
 		cancel_delayed_work(&led->work_ledr);
 		ktd20xx_turn_off_led(led, RED);
 	}
-	
+
 	if(value>255) value = 255;
 	if(value<0) value = 0;
-	
+
 
 	if (value == LED_OFF){
 		led->state_ledr = KTD_OFF;
@@ -334,10 +297,10 @@ static void ktd20xx_set_ledg_brightness(struct led_classdev *led_cdev, enum led_
 		cancel_delayed_work(&led->work_ledg);
 		ktd20xx_turn_off_led(led, GREEN);
 	}
-	
+
 	if(value>255) value = 255;
 	if(value<0) value = 0;
-	
+
 
 	if (value == LED_OFF){
 		led->state_ledg = KTD_OFF;
@@ -372,10 +335,10 @@ static void ktd20xx_set_ledb_brightness(struct led_classdev *led_cdev, enum led_
 		cancel_delayed_work(&led->work_ledb);
 		ktd20xx_turn_off_led(led, BLUE);
 	}
-	
+
 	if(value>255) value = 255;
 	if(value<0) value = 0;
-	
+
 
 	if (value == LED_OFF){
 		led->state_ledb = KTD_OFF;
@@ -433,17 +396,17 @@ static int ktd20xx_set_led_blink(struct ktd20xx_led *led, enum led_colors color,
 
 	if(debug)
  	{
-		printk(KERN_ERR "%s  led->cdev_ledr.brightness  %d  led->cdev_ledg.brightness  %d  led->cdev_ledb.brightness %d \n", 
+		printk(KERN_ERR "%s  led->cdev_ledr.brightness  %d  led->cdev_ledg.brightness  %d  led->cdev_ledb.brightness %d \n",
 			__func__,  led->cdev_ledr.brightness,  led->cdev_ledg.brightness,  led->cdev_ledb.brightness );
-	
-	
-		printk(KERN_ERR "%s color %d  rising_time %d hold_time %d falling_time %d off_time %d delay_time %d period_num %d\n", 
+
+
+		printk(KERN_ERR "%s color %d  rising_time %d hold_time %d falling_time %d off_time %d delay_time %d period_num %d\n",
 			__func__, color, rising_time, hold_time, falling_time, off_time, delay_time, period_num);
 	}
 
 	ktd20xx_write_reg(led->client, KTD_REG_RSTR, 0x00);// mode set---IC work when both SCL and SDA goes high
 	ktd20xx_write_reg(led->client, KTD_REG_LCFG+color, brightness);
-	
+
 	ret |= ktd20xx_write_reg(led->client, KTD_REG_R_F,  ramp_times);
 	ret |= ktd20xx_write_reg(led->client, KTD_REG_HOLD, period);
 	ktd20xx_write_reg(led->client, KTD_REG_PWM1, duty_cycle);//reset internal counter
@@ -464,11 +427,11 @@ static int ktd20xx_set_led_blink(struct ktd20xx_led *led, enum led_colors color,
 	}
 	if(debug)
  	{
-		printk(KERN_ERR "%s  led->state_ledr %d led->state_ledg %d  led->state_ledb %d\n", 
+		printk(KERN_ERR "%s  led->state_ledr %d led->state_ledg %d  led->state_ledb %d\n",
 			__func__, led->state_ledr, led->state_ledg, led->state_ledb);
 	}
 	ktd20xx_write_reg(led->client, KTD_REG_LEDE,  state_led);//allocate led1 to timer1
-	
+
 	return ret;
 }
 
@@ -603,7 +566,7 @@ static ssize_t blink_store(struct device *dev,
 	unsigned int offtime = 2;
 	unsigned int rise_time;
 	unsigned int fall_time;
-	
+
 	ssize_t ret = -EINVAL;
 
 	if (sscanf(buf,"%d %d %d",&value,&ontime,&offtime) < 0) {
@@ -871,7 +834,7 @@ if(debug)
 	}
 		return -ENXIO;
 	}
-	
+
 	led = devm_kzalloc(&client->dev, sizeof(struct ktd20xx_led), GFP_KERNEL);
 	if (!led) {
 		dev_err(&client->dev, "failed to allocate driver data\n");
@@ -947,7 +910,7 @@ if(debug)
 	else{
 		/* register class dev */
 		ret = ktd20xx_register_led_classdev(led);
-		
+
 		if (ret < 0){
 			goto err_exit;
 if(debug)
@@ -1024,7 +987,6 @@ static const struct i2c_device_id ktd20xx_id[] = {
 	{ }
 };
 
-// #ifdef CONFIG_OF
 static struct of_device_id bd_match_table[] = {
         { .compatible = "ktd,ktd2026",},
 		{ },
@@ -1055,8 +1017,6 @@ static void ktd20xx_driver_exit(void)
 
 module_init(ktd20xx_driver_init);
 module_exit(ktd20xx_driver_exit);
-
-//module_i2c_driver(ktd20xx_i2c_driver);
 
 MODULE_AUTHOR("Kim Kyuwon <q1.kim@samsung.com>");
 MODULE_DESCRIPTION("KTD LED driver");

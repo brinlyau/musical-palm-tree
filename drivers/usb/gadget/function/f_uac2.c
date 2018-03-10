@@ -1448,38 +1448,6 @@ static struct usb_descriptor_header *ss_audio_desc[] = {
 	NULL,
 };
 
-static struct usb_descriptor_header *ss_audio_desc[] = {
-	(struct usb_descriptor_header *)&iad_desc,
-	(struct usb_descriptor_header *)&std_ac_if_desc,
-
-	(struct usb_descriptor_header *)&ac_hdr_desc,
-	(struct usb_descriptor_header *)&in_clk_src_desc,
-	(struct usb_descriptor_header *)&out_clk_src_desc,
-	(struct usb_descriptor_header *)&usb_out_it_desc,
-	(struct usb_descriptor_header *)&io_in_it_desc,
-	(struct usb_descriptor_header *)&usb_in_ot_desc,
-	(struct usb_descriptor_header *)&io_out_ot_desc,
-
-	(struct usb_descriptor_header *)&std_as_out_if0_desc,
-	(struct usb_descriptor_header *)&std_as_out_if1_desc,
-
-	(struct usb_descriptor_header *)&as_out_hdr_desc,
-	(struct usb_descriptor_header *)&as_out_fmt1_desc,
-	(struct usb_descriptor_header *)&hs_epout_desc,
-	(struct usb_descriptor_header *)&ss_epout_comp_desc,
-	(struct usb_descriptor_header *)&as_iso_out_desc,
-
-	(struct usb_descriptor_header *)&std_as_in_if0_desc,
-	(struct usb_descriptor_header *)&std_as_in_if1_desc,
-
-	(struct usb_descriptor_header *)&as_in_hdr_desc,
-	(struct usb_descriptor_header *)&as_in_fmt1_desc,
-	(struct usb_descriptor_header *)&hs_epin_desc,
-	(struct usb_descriptor_header *)&ss_epin_comp_desc,
-	(struct usb_descriptor_header *)&as_iso_in_desc,
-	NULL,
-};
-
 struct cntrl_cur_lay3 {
 	__u32	dCUR;
 };

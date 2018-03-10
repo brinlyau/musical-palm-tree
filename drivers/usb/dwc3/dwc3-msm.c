@@ -270,6 +270,7 @@ struct dwc3_msm {
 	atomic_t                in_p3;
 	unsigned int		lpm_to_suspend_delay;
 	bool			init;
+	struct qpnp_vadc_chip	*vadc_dev;
 
 	u32                     pm_qos_latency;
 	struct pm_qos_request   pm_qos_req_dma;
